@@ -1,21 +1,120 @@
-# infograph
+# vizuka
 
-> A Vue.js project
+## model structure
 
-## Build Setup
+type Modell {
+	id: UUID!
+	name: String!
+	fields: [Field]!
+	shape: SVG
+	stroke: rgbColor
+	fill: rgbColor
+	hasRecordName: Boolean
+}
 
-``` bash
-# install dependencies
-npm install
+type Field {
+	id: UUID!
+	name: String!
+	values: [FieldValue]!
+	shape: SVG
+	transform: Visual
+}
 
-# serve with hot reload at localhost:8080
-npm run dev
+type FieldValue {
+	id: UUID!
+	value: String!
+}
 
-# build for production with minification
-npm run build
+interface Visual {
+	type: VisualType!
+	mappedValue:[String]
+}
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+enum VisualTypes {
+	Stroke,
+	Fill,
+	Opacity,
+	Shape,
+	Rotation,
+	Size,
+	StrokeType
+}
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+enum StrokeTypes {
+	DASHED,
+	SOLID,
+	DOTTED,
+	NONE
+}
+
+type Stroke implements Visual {
+	type: VisualTypes.Stroke
+	mappedValue: [rgbColor]
+}
+
+type Fill implements Visual {
+	type: VisualTypes.Fill
+	mappedValue: [rgbColor]
+}
+
+type Opacity implements Visual {
+	type: VisualTypes.Opacity
+	mappedValue: [Float]
+}
+
+type Shape implements Visual {
+	type: VisualTypes.Shape
+	mappedValue: [SVG]	
+}
+
+type Rotation implements Visual {
+	type: VisualTypes.Rotation
+	mappedValue: [Int]
+}
+
+type Size implements Visual {
+	type: VisualTypes.Size
+	mappedValue: [Float]
+}
+
+type StrokeType implements Visual {
+	type: VisualTypes.StrokeType
+	mappedValue: [StrokeTypes]
+}
+
+## save model
+
+{
+	id,
+	name,
+	fields:[{
+		id,
+		name,
+		values:[{
+			id, value
+		}, {
+			id, value
+		}],
+		shape,
+		transform:[{
+			transformType,
+			mappedValue
+		}]
+	}]
+}
+
+## save record
+
+{
+	name,
+	value: {
+		fieldId,
+		fieldValueId
+	}
+}
+
+
+
+
+
+
