@@ -8,59 +8,42 @@
       <input type="text" placeholder="add model name" v-model="model.name" :class="saved">
       <p>{{model.id}}</p>
       <div :key="field.id" v-for="field in model.fields">
-        <div>
-          <field-input :id="field.id" :model="model.id"/>
-        </div>
+          <field-input :id="field.id"/>
       </div>
     </div>
   </main>
 </template>
 
 <script>
-import fieldInput from '@/components/fieldInput.vue'
+import fieldInput from '@/components/field.vue'
 
 export default {
   name: 'createModel',
   data () {
     return {
-      count: 0,
-      model: {
-        id: this.$route.params.id,
-        name: '',
-        isSaved: false,
-        fields: []
-      }
+      id: this.$route.params.id,
+      isSaved: false
     }
   },
   computed: {
     saved () {
-      return this.model.isSaved && 'saved'
+      return this.model.name ? 'saved' : ''
+    },
+    model () {
+      return this.$store.state.editStore.model
     }
   },
   methods: {
     sendModelForm () {
-      this.$store.dispatch('updateModel', {name: this.model.name, id: this.model.id})
-        .then((resp) => {
-          console.log(resp, 'updated')
-          console.log(this.model)
-          this.model.isSaved = true
-        })
+      this.$store.dispatch('editStore/updateModelData', {name: this.model.name})
     },
     addField () {
-      this.$store.dispatch('addFieldToModel', this.model.id)
-        .then((resp) => {
-          this.model.fields = resp.fields
-        })
+      this.$store.dispatch('editStore/addFieldToModel')
     }
   },
   created () {
     const id = this.$route.params.id
-
-    this.$store.dispatch('updateStore', id).then(resp => {
-      this.model.name = resp.name
-      this.model.fields = resp.fields
-      console.log(this.model, 'refresh')
-    })
+    this.$store.dispatch('editStore/refreshModel', id)
   },
   components: {
     fieldInput
@@ -68,7 +51,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+
+</style>
+
+<style>
   main {
     padding: 40px;
   }
@@ -76,12 +63,14 @@ export default {
   .button-wrapper {
     text-align: right;
   }
+
   button {
     display: inline-block;
     padding: 10px;
     font-size: 18px;
     color: #fff;
     border: none;
+    cursor: pointer;
   }
   .save-button {
     background-color: #efce10;
