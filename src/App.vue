@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1><router-link to="/">vizumizu</router-link></h1>
     <router-view/>
   </div>
 </template>
@@ -19,4 +20,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+a {
+  text-decoration: none;
+  color: #020202;
+}
+
 </style>

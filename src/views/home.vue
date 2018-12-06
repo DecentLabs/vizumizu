@@ -1,37 +1,19 @@
 <template>
   <main>
-    <div class="button-wrapper">
-      <add-aspect/>
-    </div>
-    <div>
-      <div :key="n" v-for="n in aspectInputs">
-        <div>
-          <aspect-input :name="n.id"/>
-        </div>
-      </div>
-    </div>
+    <button @click="createModel" class="add-button">create a new model</button>
+    <h2>list of models</h2>
   </main>
 </template>
 
 <script>
-import addAspect from '@/components/addaspect.vue'
-import aspectInput from '@/components/aspectinput.vue'
-
 export default {
   name: 'home',
-  data () {
-    return {
-      count: 0
+  methods: {
+    createModel () {
+      this.$store.dispatch('createModel').then(resp => {
+        this.$router.replace(`/editModel/${resp.id}`)
+      })
     }
-  },
-  computed: {
-    aspectInputs () {
-      return this.$store.state.aspects
-    }
-  },
-  components: {
-    aspectInput,
-    addAspect
   }
 }
 </script>
@@ -41,7 +23,11 @@ export default {
     padding: 40px;
   }
 
-  .button-wrapper {
-    text-align: right;
+  .add-button {
+    display: inline-block;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #ff6232;
   }
 </style>
