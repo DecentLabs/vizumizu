@@ -22,7 +22,8 @@ export default new Router({
     {
       path: '/model/:id',
       name: 'Model',
-      component: Model
+      component: Model,
+      params: true
     }
   ]
 })

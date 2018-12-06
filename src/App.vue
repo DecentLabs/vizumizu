@@ -26,4 +26,22 @@ a {
   color: #020202;
 }
 
+.button {
+  display: inline-block;
+  padding: 10px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.add {
+  background-color: #ff6232;
+}
+
+.edit {
+  background-color: #efce10;
+}
+
+.show {
+  background-color: #3fbaa9;
+}
 </style>

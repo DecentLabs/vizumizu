@@ -4,10 +4,14 @@
     <h2>list of models</h2>
     <ul>
       <li :key="index" v-for="(model, index) in models">
-        {{model.id}}
+        {{model.name}}
         <router-link :to="{name: 'editModel', params: {id: model.id}}"
           class="button edit">
           edit model
+        </router-link>
+        <router-link :to="{name: 'Model', params: {id: model.id}}"
+                     class="button show">
+          see model
         </router-link>
       </li>
     </ul>
@@ -30,8 +34,7 @@ export default {
     }
   },
   created () {
-    const models = JSON.parse(window.localStorage.getItem('models'))
-    this.models = models
+    this.models = JSON.parse(window.localStorage.getItem('models'))
 //    window.localStorage.clear()
   }
 }
@@ -42,18 +45,7 @@ export default {
     padding: 40px;
   }
 
-  .button {
-    display: inline-block;
-    padding: 10px;
-    font-size: 18px;
-    color: #fff;
-  }
-
-  .add {
-    background-color: #ff6232;
-  }
-
-  .edit {
-    background-color: #3fbaa9;
+  li {
+    margin-bottom: 20px;
   }
 </style>

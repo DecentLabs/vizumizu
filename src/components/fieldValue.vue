@@ -37,7 +37,7 @@ export default {
   .field-row {
     display: flex;
     justify-content: space-between;
-    padding: 20px 40px;
+    padding: 20px;
     margin-bottom: 15px;
   }
 
