@@ -54,16 +54,16 @@ export default {
       const field = new Field()
       commit('setFieldToModel', field)
     },
-    saveFieldToModel ({state, getters}, {name, fieldId}) {
+    saveFieldToModel ({state, getters, dispatch}, {name, fieldId}) {
       const field = getters.getFieldById(fieldId)
       field.name = name
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
+      dispatch('appStore/updateModel', state.model, { root: true })
     },
     updateModelData ({dispatch, state}, {name}) {
       state.model.name = name
-      console.log(state.model)
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
-      dispatch('appStore/updateModels', state.model, { root: true })
+      dispatch('appStore/updateModel', state.model, { root: true })
     },
     refreshModel ({commit}, id) {
       const model = JSON.parse(window.localStorage.getItem(id))

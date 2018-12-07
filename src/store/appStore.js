@@ -18,9 +18,16 @@ export default {
     },
     setModels (state, model) {
       state.models = model
+    },
+    removeModel (state, index) {
+      state.models.splice(index, 1)
     }
   },
   actions: {
+    setModelList ({commit}) {
+      const models = JSON.parse(window.localStorage.getItem('models'))
+      commit('setModels', models)
+    },
     createModel ({state, commit}) {
       const model = new Model()
       commit('addModelToList', model)
@@ -28,12 +35,18 @@ export default {
       window.localStorage.setItem('models', JSON.stringify(state.models))
       return new Promise(resolve => resolve(model), err => console.log(err))
     },
-    updateModels ({state, commit, getters}, model) {
+    updateModel ({state, commit, getters}, model) {
       const models = JSON.parse(window.localStorage.getItem('models'))
       commit('setModels', models)
       const modelById = getters.getModelById(model.id)
-      console.log(model.id, state.models, modelById)
       modelById.name = model.name
+      window.localStorage.setItem('models', JSON.stringify(state.models))
+    },
+    deleteModel ({state, commit, getters}, id) {
+      const model = getters.getModelById(id)
+      const index = state.models.indexOf(model)
+      commit('removeModel', index)
+      console.log(state.models)
       window.localStorage.setItem('models', JSON.stringify(state.models))
     }
   }

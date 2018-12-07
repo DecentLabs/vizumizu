@@ -3,7 +3,7 @@ import uuid from 'uuidv4'
 class Model {
   constructor (id, name, fields, shape, stroke, fill, hasRecordName) {
     this.id = id || uuid()
-    this.name = name || ''
+    this.name = name || 'untitled'
     this.fields = fields || []
     this.shape = shape || null
     this.stroke = stroke || ''

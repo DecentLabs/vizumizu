@@ -2,9 +2,8 @@
   <div class="field-row">
     <div>
       <label :for="id">Value name</label>
-      <input :id="id" type="text" v-model="value.name" :class="saved">
+      <input :id="id" type="text" v-model="value.name" :class="saved" @change="saveValue">
     </div>
-    <button @click="saveValue" class="save-button">save value</button>
   </div>
 </template>
 
@@ -27,6 +26,7 @@ export default {
         id: this.id,
         fieldId: this.fieldId
       }
+      console.log(options.name)
       this.$store.dispatch('editStore/saveValueToField', options)
     }
   }
@@ -37,7 +37,6 @@ export default {
   .field-row {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
     margin-bottom: 15px;
   }
 

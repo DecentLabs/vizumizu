@@ -5,14 +5,17 @@
     <ul>
       <li :key="index" v-for="(model, index) in models">
         {{model.name}}
-        <router-link :to="{name: 'editModel', params: {id: model.id}}"
-          class="button edit">
-          edit model
-        </router-link>
-        <router-link :to="{name: 'Model', params: {id: model.id}}"
-                     class="button show">
-          see model
-        </router-link>
+        <div>
+          <router-link :to="{name: 'editModel', params: {id: model.id}}"
+            class="button edit">
+            edit model
+          </router-link>
+          <router-link :to="{name: 'Model', params: {id: model.id}}"
+                       class="button show">
+            see model
+          </router-link>
+          <button @click="deleteModel(model.id)" class="delete">delete model</button>
+        </div>
       </li>
     </ul>
   </main>
@@ -21,9 +24,9 @@
 <script>
 export default {
   name: 'home',
-  data () {
-    return {
-      models: []
+  computed: {
+    models () {
+      return this.$store.state.appStore.models
     }
   },
   methods: {
@@ -31,11 +34,13 @@ export default {
       this.$store.dispatch('appStore/createModel').then(resp => {
         this.$router.replace(`/editModel/${resp.id}`)
       })
+    },
+    deleteModel (id) {
+      this.$store.dispatch('appStore/deleteModel', id)
     }
   },
   created () {
-    this.models = JSON.parse(window.localStorage.getItem('models'))
-//    window.localStorage.clear()
+    this.$store.dispatch('appStore/setModelList')
   }
 }
 </script>
@@ -45,7 +50,32 @@ export default {
     padding: 40px;
   }
 
+  ul {
+    width: 760px;
+    margin: 0 auto;
+    list-style: none;
+  }
+
   li {
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 22px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  button {
+    display: inline-block;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  .delete {
+    background-color: #194959;
   }
 </style>
