@@ -53,8 +53,9 @@ export default {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-    padding: 0 40px;
+    padding: 20px 40px;
     margin-bottom: 15px;
+    border-bottom: 1px solid #848484;
   }
 
   label, input {

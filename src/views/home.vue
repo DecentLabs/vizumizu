@@ -1,7 +1,9 @@
 <template>
   <main>
-    <button @click="createModel" class="button add">create a new model</button>
-    <h2>list of models</h2>
+    <div class="button-wrapper">
+      <button @click="createModel" class="button add">create a new model</button>
+      <router-link to="/record" class="button show">add a record</router-link>
+    </div>
     <ul>
       <li :key="index" v-for="(model, index) in models">
         {{model.name}}
@@ -50,6 +52,11 @@ export default {
     padding: 40px;
   }
 
+  .button-wrapper {
+    margin-bottom: 60px;
+    text-align: center;
+  }
+
   ul {
     width: 760px;
     margin: 0 auto;
@@ -59,6 +66,7 @@ export default {
   li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
     font-size: 22px;
     padding-bottom: 15px;

@@ -1,9 +1,7 @@
 <template>
-  <div class="field-row">
-    <div>
-      <label :for="id">Value name</label>
-      <input :id="id" type="text" v-model="value.name" :class="saved" @change="saveValue">
-    </div>
+  <div class="value-row">
+    <label :for="id">Value name</label>
+    <input :id="id" type="text" v-model="value.name" :class="saved" @change="saveValue">
   </div>
 </template>
 
@@ -34,10 +32,9 @@ export default {
 </script>
 
 <style scoped>
-  .field-row {
-    display: flex;
-    justify-content: space-between;
+  .value-row {
     margin-bottom: 15px;
+    text-align: left;
   }
 
   label, input {

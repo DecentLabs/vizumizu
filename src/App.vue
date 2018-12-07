@@ -26,11 +26,14 @@ a {
   color: #020202;
 }
 
-.button {
+button, .button {
   display: inline-block;
   padding: 10px;
   font-size: 18px;
   color: #fff;
+  border: none;
+  cursor: pointer;
+  line-height: 1.2;
 }
 
 .add {

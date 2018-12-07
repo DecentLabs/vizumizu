@@ -64,6 +64,7 @@ export default {
       state.model.name = name
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
       dispatch('appStore/updateModel', state.model, { root: true })
+      // dispatch('appStore/setModelList', { root: true })
     },
     refreshModel ({commit}, id) {
       const model = JSON.parse(window.localStorage.getItem(id))

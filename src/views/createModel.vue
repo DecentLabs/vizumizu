@@ -5,7 +5,7 @@
       <button @click="addField" class="add-button">add new field</button>
     </div>
     <div>
-      <input type="text" placeholder="add model name" v-model="model.name" :class="saved">
+      <input type="text" placeholder="add model name" v-model="model.name" class="title">
       <p>{{model.id}}</p>
       <div :key="field.id" v-for="field in model.fields">
           <field-input :id="field.id"/>
@@ -64,14 +64,6 @@ export default {
     text-align: right;
   }
 
-  button {
-    display: inline-block;
-    padding: 10px;
-    font-size: 18px;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
   .save-button {
     background-color: #efce10;
   }
@@ -80,16 +72,21 @@ export default {
     background-color: #ff6232;
   }
 
-  input {
-    font-size: 18px;
-    color: #848484;
-    border: none;
-    border-bottom: 1px solid #efce10;
+  .title {
+    font-size: 24px;
   }
 
-  input.saved {
+  input {
+    font-size: 18px;
+    /*color: #848484;*/
+    border: none;
+    /*border-bottom: 1px solid #efce10;*/
     color: #121212;
     font-weight: 700;
     border-bottom: 1px solid #333;
+  }
+
+  input.saved {
+
   }
 </style>

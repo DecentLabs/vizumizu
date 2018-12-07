@@ -40,13 +40,13 @@ export default {
       commit('setModels', models)
       const modelById = getters.getModelById(model.id)
       modelById.name = model.name
+      modelById.fields = model.fields
       window.localStorage.setItem('models', JSON.stringify(state.models))
     },
     deleteModel ({state, commit, getters}, id) {
       const model = getters.getModelById(id)
       const index = state.models.indexOf(model)
       commit('removeModel', index)
-      console.log(state.models)
       window.localStorage.setItem('models', JSON.stringify(state.models))
     }
   }
