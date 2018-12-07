@@ -18,7 +18,7 @@
           <label>select {{field.name}}</label>
           <select v-model="selectedModelsFields[i].value">
             <option :key="index" v-for="(value, index) in field.fieldValues"
-                    :value="value.name">{{value.name}}</option>
+                    :value="value.id">{{value.name}}</option>
           </select>
         </div>
       </div>
@@ -56,17 +56,15 @@ export default {
       console.log(this.selectedModel)
       console.log(this.selectedModelsFields)
 
-      const recordFields = this.selectedModelsFields.map(field => {
-        return new Field(field.data.name, [new FieldValue(field.value)])
-      })
-
-      const recordModel = new Model(null, this.recordName, recordFields)
-      console.log(recordModel)
+      const values = this.selectedModelsFields.map(field => ({
+        fieldId: field.data.id,
+        fieldValueId: field.value
+      }))
 
       const recordData = {
         name: this.recordName,
-        data: this.selectedModel,
-        fields: this.selectedModelsFields
+        model: this.selectedModel.id,
+        values
       }
       this.$store.dispatch('recordStore/addRecord', recordData)
     }

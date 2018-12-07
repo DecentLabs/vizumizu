@@ -10,13 +10,6 @@
         </ul>
       </li>
     </ul>
-    <h3>see records</h3>
-    <ul v-for="record in records">
-      <p>{{record.name}}</p>
-      <li v-for="field in record.fields">
-        {{field.name}}: {{field.value}}
-      </li>
-    </ul>
   </main>
 </template>
 
@@ -29,14 +22,10 @@ export default {
     },
     model () {
       return this.$store.state.editStore.model
-    },
-    records () {
-      return this.$store.getters['recordStore/getRecordsByModel'](this.id)
     }
   },
   created () {
     this.$store.dispatch('editStore/refreshModel', this.id)
-    this.$store.dispatch('recordStore/setRecordList')
   }
 }
 </script>
