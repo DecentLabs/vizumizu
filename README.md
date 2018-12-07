@@ -107,10 +107,11 @@ type StrokeType implements Visual {
 
 {
 	name,
-	value: {
+	modelId,
+	values: [{
 		fieldId,
 		fieldValueId
-	}
+	}]
 }
 
 
