@@ -7,6 +7,7 @@
     <div>
       <button @click="saveField" class="save-button">save field</button>
       <button @click="addFieldValue" class="add-button">add value</button>
+      <button @click="deleteField" class="delete-button">X</button>
     </div>
     <div class="field-values">
       <div :key="val.id" v-for="val in field.fieldValues">
@@ -40,6 +41,13 @@ export default {
     },
     addFieldValue () {
       this.$store.dispatch('editStore/addValueToField', this.field.id)
+    },
+    deleteField () {
+      const options = {
+        name: this.field.name,
+        fieldId: this.id
+      }
+      this.$store.dispatch('editStore/deleteField', options)
     }
   },
   components: {
@@ -71,5 +79,9 @@ export default {
   .field-values {
     width: 100%;
     padding: 20px;
+  }
+
+  .delete-button {
+    background-color: #020202;
   }
 </style>

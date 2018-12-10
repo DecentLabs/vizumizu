@@ -7,8 +7,7 @@ export default {
       id: '',
       name: '',
       fields: []
-    },
-    currentField: {}
+    }
   },
   getters: {
     getFieldById (state) {
@@ -16,9 +15,9 @@ export default {
         return state.model.fields.filter(field => field.id === id).pop()
       }
     },
-    getFieldValueById (state) {
-      return (id) => {
-        return state.currentField.fieldValues && state.currentField.fieldValues.filter(value => value.id === id).pop()
+    getFieldValueById () {
+      return (valueId, field) => {
+        return field.fieldValues.filter(value => value.id === valueId).pop()
       }
     }
   },
@@ -28,47 +27,57 @@ export default {
     },
     setFieldToModel (state, field) {
       state.model.fields.push(field)
-    },
-    setCurrentField (state, field) {
-      state.currentField = field
-    },
-    setValueToField (state, value) {
-      state.currentField.fieldValues.push(value)
     }
   },
   actions: {
-    addValueToField ({getters, commit}, fieldId) {
+    addValueToField ({getters}, fieldId) {
       const fieldValue = new FieldValue()
       const field = getters.getFieldById(fieldId)
-      commit('setCurrentField', field)
-      commit('setValueToField', fieldValue)
+      field.fieldValues.push(fieldValue)
     },
-    saveValueToField ({state, commit, getters}, {name, id, fieldId}) {
+    saveValueToField ({state, getters}, {name, valueId, fieldId}) {
       const field = getters.getFieldById(fieldId)
-      commit('setCurrentField', field)
-      const value = getters.getFieldValueById(id)
+      const value = getters.getFieldValueById(valueId, field)
       value.name = name
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
     },
-    addFieldToModel ({commit}) {
-      const field = new Field()
-      commit('setFieldToModel', field)
-    },
-    saveFieldToModel ({state, getters, dispatch}, {name, fieldId}) {
+    deleteValueOfField ({state, getters, dispatch}, {valueId, fieldId}) {
       const field = getters.getFieldById(fieldId)
-      field.name = name
+      const value = getters.getFieldValueById(valueId, field)
+      const index = field.fieldValues.indexOf(value)
+      field.fieldValues.splice(index, 1)
+
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
       dispatch('appStore/updateModel', state.model, { root: true })
+    },
+    addFieldToModel ({commit, dispatch}) {
+      const field = new Field()
+      commit('setFieldToModel', field)
+      dispatch('saveModeltoModelList')
+    },
+    saveFieldToModel ({getters, dispatch}, {name, fieldId}) {
+      const field = getters.getFieldById(fieldId)
+      field.name = name
+      dispatch('saveModeltoModelList')
+    },
+    deleteField ({state, getters, dispatch}, {name, fieldId}) {
+      const field = getters.getFieldById(fieldId)
+      const index = state.model.fields.indexOf(field)
+      state.model.fields.splice(index, 1)
+      dispatch('saveModeltoModelList')
     },
     updateModelData ({dispatch, state}, {name}) {
       state.model.name = name
-      window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
-      dispatch('appStore/updateModel', state.model, { root: true })
+      dispatch('saveModeltoModelList')
       // dispatch('appStore/setModelList', { root: true })
     },
     refreshModel ({commit}, id) {
       const model = JSON.parse(window.localStorage.getItem(id))
       commit('setModel', model)
+    },
+    saveModeltoModelList ({state, dispatch}) {
+      window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
+      dispatch('appStore/updateModel', state.model, { root: true })
     }
   }
 }
