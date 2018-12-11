@@ -1,4 +1,4 @@
-import { Field, FieldValue } from '../data/interfaces'
+import { Field, FieldValue, Visual } from '../data/interfaces'
 
 export default {
   namespaced: true,
@@ -47,8 +47,17 @@ export default {
       const index = field.fieldValues.indexOf(value)
       field.fieldValues.splice(index, 1)
 
-      window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
-      dispatch('appStore/updateModel', state.model, { root: true })
+      dispatch('saveModeltoModelList')
+    },
+    resetVisualsOfFiels ({getters, dispatch}, fieldId) {
+      const field = getters.getFieldById(fieldId)
+      field.transform = {}
+      dispatch('saveModeltoModelList')
+    },
+    saveVisualToField ({getters, dispatch}, {type, mappedValue, valueId, fieldId}) {
+      const field = getters.getFieldById(fieldId)
+      field.transform[valueId] = new Visual(type, mappedValue)
+      dispatch('saveModeltoModelList')
     },
     addFieldToModel ({commit, dispatch}) {
       const field = new Field()
@@ -60,7 +69,7 @@ export default {
       field.name = name
       dispatch('saveModeltoModelList')
     },
-    deleteField ({state, getters, dispatch}, {name, fieldId}) {
+    deleteField ({state, getters, dispatch}, {fieldId}) {
       const field = getters.getFieldById(fieldId)
       const index = state.model.fields.indexOf(field)
       state.model.fields.splice(index, 1)

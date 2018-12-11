@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import {Model, Field, FieldValue} from '../data/interfaces'
-
 export default {
   name: 'Record',
   data () {

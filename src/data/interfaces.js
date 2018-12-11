@@ -18,7 +18,7 @@ class Field {
     this.name = name || ''
     this.fieldValues = fieldValues || []
     this.shape = shape || null
-    this.transform = transform || null
+    this.transform = transform || {}
   }
 }
 
@@ -29,8 +29,52 @@ class FieldValue {
   }
 }
 
+class Visual {
+  constructor (type, mappedValue) {
+    this.type = type || ''
+    this.mappedValue = mappedValue || ''
+  }
+}
+
+const visualTypes = [
+  {
+    type: 'StrokeColor',
+    mappedValue: 'rgba'
+  },
+  {
+    type: 'FillColor',
+    mappedValue: 'rgba'
+  },
+  {
+    type: 'Opacity',
+    mappedValue: 0.0
+  },
+  {
+    type: 'Shape',
+    mappedValue: ['circle', 'triangle', 'rect']
+  },
+  {
+    type: 'Rotation',
+    mappedValue: 0
+  },
+  {
+    type: 'Size',
+    mappedValue: 0.0
+  },
+  {
+    type: 'StrokeType',
+    mappedValue: ''
+  },
+  {
+    type: 'StrokeSize',
+    mappedValue: 0
+  }
+]
+
 export {
   Model,
   Field,
-  FieldValue
+  FieldValue,
+  Visual,
+  visualTypes
 }

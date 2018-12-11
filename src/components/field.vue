@@ -2,7 +2,14 @@
   <div class="field-row">
     <div>
       <label :for="id">Field name</label>
-      <input :id="id" type="text" v-model="field.name" :class="saved">
+      <input :id="id" type="text" v-model="field.name">
+    </div>
+    <div>
+      <label>Field visual</label>
+      <select v-model="selectedVisual">
+        <option :key="index" v-for="(visual, index) in visualTypes"
+            :value="visual">{{visual}}</option>
+      </select>
     </div>
     <div>
       <button @click="saveField" class="save-button">save field</button>
@@ -11,7 +18,7 @@
     </div>
     <div class="field-values">
       <div :key="val.id" v-for="val in field.fieldValues">
-        <field-value :id="val.id" :fieldId="id"/>
+        <field-value :id="val.id" :fieldId="id" :visual="selectedVisual"/>
       </div>
     </div>
   </div>
@@ -19,16 +26,20 @@
 
 <script>
 import fieldValue from '@/components/fieldValue.vue'
+import {visualTypes} from '../data/interfaces'
 
 export default {
   name: 'fieldInput',
   props: ['id'],
+  data () {
+    return {
+      visualTypes: visualTypes.map(i => i.type),
+      selectedVisual: ''
+    }
+  },
   computed: {
     field () {
       return this.$store.getters['editStore/getFieldById'](this.id)
-    },
-    saved () {
-      return this.field.name ? 'saved' : ''
     }
   },
   methods: {
@@ -44,7 +55,6 @@ export default {
     },
     deleteField () {
       const options = {
-        name: this.field.name,
         fieldId: this.id
       }
       this.$store.dispatch('editStore/deleteField', options)

@@ -1,22 +1,48 @@
 <template>
   <div class="value-row">
-    <label :for="id">Value name</label>
-    <input :id="id" type="text" v-model="value.name" :class="saved" @change="saveValue">
-    <button @click="deleteValue">X</button>
+    <div>
+      <label :for="id">Value name</label>
+      <input :id="id" type="text" v-model="value.name" @change="saveValue">
+      <button @click="deleteValue">X</button>
+    </div>
+    <div v-if="isMultipleValue">
+      <label>visual value</label>
+      <select v-model="visualValue" @change="saveVisualValue">
+        <option :key="index" v-for="(visual, index) in selectedVisual"
+                :value="visual">{{visual}}</option>
+      </select>
+    </div>
+    <div v-else>
+      <label>visual value</label>
+      <input type="text" v-model="visualValue" @change="saveVisualValue">
+    </div>
   </div>
 </template>
 
 <script>
+import {visualTypes} from '../data/interfaces'
+
 export default {
   name: 'fieldValue',
-  props: ['id', 'fieldId'],
+  props: ['id', 'fieldId', 'visual'],
+  data () {
+    return {
+      visualValue: ''
+    }
+  },
   computed: {
     value () {
       const field = this.$store.getters['editStore/getFieldById'](this.fieldId)
       return this.$store.getters['editStore/getFieldValueById'](this.id, field) || {name: 'value'}
     },
-    saved () {
-      return this.value.name ? 'saved' : ''
+    selectedVisual () {
+      const visual = visualTypes.filter(i => {
+        return i.type === this.visual
+      }).pop()
+      return visual ? visual.mappedValue : ''
+    },
+    isMultipleValue () {
+      return typeof this.selectedVisual === 'object'
     }
   },
   methods: {
@@ -34,6 +60,25 @@ export default {
         fieldId: this.fieldId
       }
       this.$store.dispatch('editStore/deleteValueOfField', options)
+    },
+    saveVisualValue () {
+      const options = {
+        type: this.selectedVisual,
+        mappedValue: this.visualValue,
+        valueId: this.id,
+        fieldId: this.fieldId
+      }
+      this.$store.dispatch('editStore/saveVisualToField', options)
+    }
+  },
+  watch: {
+    selectedVisual () {
+      this.$store.dispatch('editStore/resetVisualsOfFiels', this.fieldId)
+      if (!this.isMultipleValue) {
+        this.visualValue = this.selectedVisual
+      } else {
+        this.visualValue = ''
+      }
     }
   }
 }
