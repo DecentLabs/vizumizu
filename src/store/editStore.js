@@ -1,5 +1,10 @@
 import { Field, FieldValue, Visual } from '../data/interfaces'
 
+const initTransform = {
+  type: '',
+  values: {}
+}
+
 export default {
   namespaced: true,
   state: {
@@ -51,12 +56,13 @@ export default {
     },
     resetVisualsOfFiels ({getters, dispatch}, fieldId) {
       const field = getters.getFieldById(fieldId)
-      field.transform = {}
+      field.transform = initTransform
       dispatch('saveModeltoModelList')
     },
-    saveVisualToField ({getters, dispatch}, {type, mappedValue, valueId, fieldId}) {
+    saveVisualToField ({getters, dispatch}, {type, mappedValue = '', valueId = '', fieldId}) {
       const field = getters.getFieldById(fieldId)
-      field.transform[valueId] = new Visual(type, mappedValue)
+      field.transform.type = type
+      field.transform.values[valueId] = new Visual(type, mappedValue)
       dispatch('saveModeltoModelList')
     },
     addFieldToModel ({commit, dispatch}) {

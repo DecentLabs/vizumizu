@@ -31,9 +31,11 @@ export default {
     }
   },
   computed: {
+    field () {
+      return this.$store.getters['editStore/getFieldById'](this.fieldId)
+    },
     value () {
-      const field = this.$store.getters['editStore/getFieldById'](this.fieldId)
-      return this.$store.getters['editStore/getFieldValueById'](this.id, field) || {name: 'value'}
+      return this.$store.getters['editStore/getFieldValueById'](this.id, this.field) || {name: 'value'}
     },
     selectedVisual () {
       return visualTypes.filter(i => {
@@ -41,7 +43,6 @@ export default {
       }).pop()
     },
     selectedVisualValue () {
-      console.log(this.selectedVisual)
       return this.selectedVisual ? this.selectedVisual.mappedValue : ''
     },
     isMultipleValue () {
@@ -74,6 +75,9 @@ export default {
       this.$store.dispatch('editStore/saveVisualToField', options)
     }
   },
+  created () {
+    this.visualValue = this.field.transform.values[this.id].mappedValue
+  },
   watch: {
     selectedVisualValue () {
       this.$store.dispatch('editStore/resetVisualsOfFiels', this.fieldId)
@@ -82,7 +86,6 @@ export default {
       } else {
         this.visualValue = this.selectedVisualValue
       }
-      console.log(this.visualValue, this.selectedVisual, this.selectedVisualValue)
     }
   }
 }

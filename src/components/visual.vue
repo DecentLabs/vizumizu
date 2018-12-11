@@ -11,16 +11,18 @@ export default {
   data () {
     return {
       shape: this.set.shape || '',
-      bordercolor: this.set.strokecolor,
       fillcolor: this.set.fillcolor,
+      strokecolor: this.set.strokecolor || '#000',
       strokesize: this.set.strokesize,
+      stroketype: this.set.stroketype,
+      opacity: this.set.opacity,
+      rotation: this.set.rotation,
+      size: this.set.size,
       canvas: null,
       ctx: null
     }
   },
   computed: {
-    rectangle () {
-    }
   },
   methods: {
     drawShape () {
@@ -59,7 +61,7 @@ export default {
     },
     initStyle () {
       this.ctx.fillStyle = this.fillcolor
-      this.ctx.strokeStyle = 'black'
+      this.ctx.strokeStyle = this.strokecolor
       this.ctx.lineWidth = this.strokesize * 3
     }
   },

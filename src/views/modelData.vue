@@ -2,6 +2,9 @@
   <main>
     <h1>Collected data</h1>
     <h2>{{model.name}}</h2>
+    <div class="legend">
+      <p v-for="item in transforms"> {{item}}</p>
+    </div>
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
     </div>
@@ -41,14 +44,15 @@ export default {
   methods: {
     mapVisual (fieldId, fieldValue) {
       const field = this.model.fields.filter(field => field.id === fieldId).pop()
-      const transform = field.transform[fieldValue]
+      const transform = field.transform.values[fieldValue]
       return {[transform.type.toLowerCase()]: transform.mappedValue}
     }
   },
-  watch: {},
   created () {
     this.$store.dispatch('appStore/setModelList')
     this.$store.dispatch('recordStore/setRecordList')
+
+    this.transforms = this.model.fields.map(field => field.transform)
   },
   components: {
     visual

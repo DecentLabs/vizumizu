@@ -18,7 +18,7 @@ class Field {
     this.name = name || ''
     this.fieldValues = fieldValues || []
     this.shape = shape || null
-    this.transform = transform || {}
+    this.transform = transform || { type: '', values: {} }
   }
 }
 
@@ -63,7 +63,7 @@ const visualTypes = [
   },
   {
     type: 'StrokeType',
-    mappedValue: ''
+    mappedValue: ['solid', 'dotted', 'dashed']
   },
   {
     type: 'StrokeSize',

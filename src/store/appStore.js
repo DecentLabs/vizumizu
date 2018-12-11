@@ -54,8 +54,6 @@ export default {
       const index = state.models.indexOf(model)
       commit('removeModel', index)
       window.localStorage.setItem('models', JSON.stringify(state.models))
-    },
-    setVisuals () {
     }
   }
 }

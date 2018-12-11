@@ -48,6 +48,7 @@ export default {
         name: this.field.name,
         fieldId: this.id
       }
+      this.$store.dispatch('editStore/saveVisualToField', {fieldId: this.id, type: this.selectedVisual})
       this.$store.dispatch('editStore/saveFieldToModel', options)
     },
     addFieldValue () {
@@ -62,6 +63,9 @@ export default {
   },
   components: {
     fieldValue
+  },
+  created () {
+    this.selectedVisual = this.field.transform.type
   }
 }
 </script>

@@ -6,7 +6,7 @@
     </div>
     <ul>
       <li :key="index" v-for="(model, index) in models">
-        <router-link :to="{name: 'Mode', params: {id: model.id}}">
+        <router-link :to="{name: 'Model', params: {id: model.id}}">
           {{model.name}}
         </router-link>
         <div>
