@@ -6,7 +6,14 @@ export default {
   getters: {
     getRecordsByModel (state) {
       return (id) => {
-        return state.records.filter(item => item.model.id === id)
+        return state.records.filter(item => item.model === id).map(record => record.values)
+      }
+    },
+    getFieldValuesOfRecords (state) {
+      return records => {
+        return records.map(record => {
+          return record.values
+        })
       }
     }
   },

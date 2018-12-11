@@ -8,7 +8,7 @@
     <div v-if="isMultipleValue">
       <label>visual value</label>
       <select v-model="visualValue" @change="saveVisualValue">
-        <option :key="index" v-for="(visual, index) in selectedVisual"
+        <option :key="index" v-for="(visual, index) in selectedVisualValue"
                 :value="visual">{{visual}}</option>
       </select>
     </div>
@@ -36,13 +36,16 @@ export default {
       return this.$store.getters['editStore/getFieldValueById'](this.id, field) || {name: 'value'}
     },
     selectedVisual () {
-      const visual = visualTypes.filter(i => {
+      return visualTypes.filter(i => {
         return i.type === this.visual
       }).pop()
-      return visual ? visual.mappedValue : ''
+    },
+    selectedVisualValue () {
+      console.log(this.selectedVisual)
+      return this.selectedVisual ? this.selectedVisual.mappedValue : ''
     },
     isMultipleValue () {
-      return typeof this.selectedVisual === 'object'
+      return typeof this.selectedVisualValue === 'object'
     }
   },
   methods: {
@@ -63,7 +66,7 @@ export default {
     },
     saveVisualValue () {
       const options = {
-        type: this.selectedVisual,
+        type: this.selectedVisual.type,
         mappedValue: this.visualValue,
         valueId: this.id,
         fieldId: this.fieldId
@@ -72,13 +75,14 @@ export default {
     }
   },
   watch: {
-    selectedVisual () {
+    selectedVisualValue () {
       this.$store.dispatch('editStore/resetVisualsOfFiels', this.fieldId)
-      if (!this.isMultipleValue) {
-        this.visualValue = this.selectedVisual
-      } else {
+      if (this.isMultipleValue) {
         this.visualValue = ''
+      } else {
+        this.visualValue = this.selectedVisualValue
       }
+      console.log(this.visualValue, this.selectedVisual, this.selectedVisualValue)
     }
   }
 }
@@ -86,8 +90,13 @@ export default {
 
 <style scoped>
   .value-row {
+    display: flex;
     margin-bottom: 15px;
     text-align: left;
+  }
+
+  .value-row > div {
+    margin-right: 60px;
   }
 
   label, input {

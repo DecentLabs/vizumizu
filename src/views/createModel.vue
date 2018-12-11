@@ -52,10 +52,6 @@ export default {
 </script>
 
 <style>
-
-</style>
-
-<style>
   main {
     padding: 40px;
   }
@@ -76,7 +72,9 @@ export default {
     font-size: 24px;
   }
 
-  input {
+  input,
+  select,
+  option {
     font-size: 18px;
     /*color: #848484;*/
     border: none;
@@ -84,6 +82,10 @@ export default {
     color: #121212;
     font-weight: 700;
     border-bottom: 1px solid #333;
+    border-radius: 0;
+    -webkit-appearance: initial;
+    appearance: initial;
+    background: none;
   }
 
   input.saved {

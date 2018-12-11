@@ -3,12 +3,18 @@ import {Model} from '../data/interfaces'
 export default {
   namespaced: true,
   state: {
-    models: []
+    models: [],
+    visuals: []
   },
   getters: {
     getModelById (state) {
       return (id) => {
         return state.models.filter(model => model.id === id).pop()
+      }
+    },
+    getModelsVisuals (state) {
+      return (model) => {
+        return model.transform
       }
     }
   },
@@ -48,6 +54,8 @@ export default {
       const index = state.models.indexOf(model)
       commit('removeModel', index)
       window.localStorage.setItem('models', JSON.stringify(state.models))
+    },
+    setVisuals () {
     }
   }
 }

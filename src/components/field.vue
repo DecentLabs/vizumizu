@@ -81,7 +81,8 @@ export default {
     padding: 5px 10px;
   }
 
-  input {
+  input,
+  select {
     border: none;
     border-bottom: 1px solid #333;
   }

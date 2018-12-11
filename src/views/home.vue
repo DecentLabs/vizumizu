@@ -6,15 +6,17 @@
     </div>
     <ul>
       <li :key="index" v-for="(model, index) in models">
-        {{model.name}}
+        <router-link :to="{name: 'Mode', params: {id: model.id}}">
+          {{model.name}}
+        </router-link>
         <div>
           <router-link :to="{name: 'editModel', params: {id: model.id}}"
             class="button edit">
             edit model
           </router-link>
-          <router-link :to="{name: 'Model', params: {id: model.id}}"
+          <router-link :to="{name: 'ModelData', params: {id: model.id}}"
                        class="button show">
-            see model
+            see model data
           </router-link>
           <button @click="deleteModel(model.id)" class="delete">delete model</button>
         </div>
