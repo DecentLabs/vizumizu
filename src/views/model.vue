@@ -21,11 +21,11 @@ export default {
       return this.$route.params.id
     },
     model () {
-      return this.$store.state.editStore.model
+      return this.$store.state.modelStore.model
     }
   },
   created () {
-    this.$store.dispatch('editStore/refreshModel', this.id)
+    this.$store.dispatch('modelStore/refreshModel', this.id)
   }
 }
 </script>

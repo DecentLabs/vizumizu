@@ -39,11 +39,11 @@ class Visual {
 const visualTypes = [
   {
     type: 'StrokeColor',
-    mappedValue: 'rgba'
+    mappedValue: 'rgba()'
   },
   {
     type: 'FillColor',
-    mappedValue: 'rgba'
+    mappedValue: 'rgba()'
   },
   {
     type: 'Opacity',

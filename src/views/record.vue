@@ -22,7 +22,8 @@
           </select>
         </div>
       </div>
-      <button @click="saveRecord">save</button>
+      <button @click="saveRecordAndFinish">save</button>
+      <button @click="saveRecordAndAdd">save and add new</button>
     </form>
   </main>
 </template>
@@ -49,11 +50,7 @@ export default {
     }
   },
   methods: {
-    saveRecord (e) {
-      e.preventDefault()
-      console.log(this.selectedModel)
-      console.log(this.selectedModelsFields)
-
+    saveRecord () {
       const values = this.selectedModelsFields.map(field => ({
         fieldId: field.data.id,
         fieldValueId: field.value
@@ -65,6 +62,16 @@ export default {
         values
       }
       this.$store.dispatch('recordStore/addRecord', recordData)
+    },
+    saveRecordAndAdd (e) {
+      e.preventDefault()
+      this.saveRecord()
+      this.$router.go(this.$route.path)
+    },
+    saveRecordAndFinish (e) {
+      e.preventDefault()
+      this.saveRecord()
+      this.$router.go('/')
     }
   },
   watch: {

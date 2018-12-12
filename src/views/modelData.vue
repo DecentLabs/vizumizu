@@ -1,10 +1,13 @@
 <template>
   <main>
-    <h1>Collected data</h1>
-    <h2>{{model.name}}</h2>
-    <div class="legend">
-      <p v-for="item in transforms"> {{item}}</p>
-    </div>
+    <h1>Collected data: {{model.name}}</h1>
+    <router-link :to="{name: 'editModel', params: {id: model.id}}"
+                 class="button edit">
+      edit model
+    </router-link>
+    <!--<div class="legend">-->
+      <!--<p v-for="item in transforms"> {{item}}</p>-->
+    <!--</div>-->
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
     </div>
@@ -35,7 +38,6 @@ export default {
       return this.records.map(record => {
         return record.map(item => this.mapVisual(item.fieldId, item.fieldValueId)).reduce((acc, curr) => {
           Object.assign(acc, curr)
-          console.log(acc, curr)
           return acc
         }, {})
       })

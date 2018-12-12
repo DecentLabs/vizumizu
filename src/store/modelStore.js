@@ -11,7 +11,10 @@ export default {
     model: {
       id: '',
       name: '',
-      fields: []
+      fields: [],
+      shape: '',
+      fill: '',
+      stroke: ''
     }
   },
   getters: {
@@ -32,6 +35,15 @@ export default {
     },
     setFieldToModel (state, field) {
       state.model.fields.push(field)
+    },
+    setShape (state, shape) {
+      state.model.shape = shape
+    },
+    setFill (state, fill) {
+      state.model.fill = fill
+    },
+    setStroke (state, stroke) {
+      state.model.stroke = stroke
     }
   },
   actions: {
@@ -70,9 +82,11 @@ export default {
       commit('setFieldToModel', field)
       dispatch('saveModeltoModelList')
     },
-    saveFieldToModel ({getters, dispatch}, {name, fieldId}) {
+    saveFieldToModel ({getters, dispatch}, {name, shape, fill, fieldId}) {
       const field = getters.getFieldById(fieldId)
       field.name = name
+      field.shape = shape
+      field.fill = fill
       dispatch('saveModeltoModelList')
     },
     deleteField ({state, getters, dispatch}, {fieldId}) {
@@ -81,8 +95,9 @@ export default {
       state.model.fields.splice(index, 1)
       dispatch('saveModeltoModelList')
     },
-    updateModelData ({dispatch, state}, {name}) {
+    updateModelData ({dispatch, state}, {name, shape}) {
       state.model.name = name
+      state.model.shape = shape
       dispatch('saveModeltoModelList')
       // dispatch('appStore/setModelList', { root: true })
     },
@@ -91,6 +106,7 @@ export default {
       commit('setModel', model)
     },
     saveModeltoModelList ({state, dispatch}) {
+      console.log(state.model)
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
       dispatch('appStore/updateModel', state.model, { root: true })
     }

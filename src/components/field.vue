@@ -12,14 +12,21 @@
       </select>
     </div>
     <div>
-      <button @click="saveField" class="save-button">save field</button>
-      <button @click="addFieldValue" class="add-button">add value</button>
-      <button @click="deleteField" class="delete-button">X</button>
+      <label>Field shape</label>
+      <select v-model="fieldShape">
+        <option :key="index" v-for="(item, index) in shapes"
+                :value="item">{{item}}</option>
+      </select>
     </div>
     <div class="field-values">
       <div :key="val.id" v-for="val in field.fieldValues">
         <field-value :id="val.id" :fieldId="id" :visual="selectedVisual"/>
       </div>
+    </div>
+    <div class="button-row">
+      <button @click="saveField" class="save-button">save field</button>
+      <button @click="addFieldValue" class="add-button">add value</button>
+      <button @click="deleteField" class="delete-button">X</button>
     </div>
   </div>
 </template>
@@ -30,35 +37,43 @@ import {visualTypes} from '../data/interfaces'
 
 export default {
   name: 'fieldInput',
-  props: ['id'],
+  props: ['id', 'shape'],
   data () {
     return {
       visualTypes: visualTypes.map(i => i.type),
-      selectedVisual: ''
+      selectedVisual: '',
+      fieldShape: ''
     }
   },
   computed: {
     field () {
-      return this.$store.getters['editStore/getFieldById'](this.id)
+      return this.$store.getters['modelStore/getFieldById'](this.id)
+    },
+    shapes () {
+      const shapes = visualTypes.filter(i => {
+        return i.type === 'Shape'
+      }).pop()
+      return shapes.mappedValue
     }
   },
   methods: {
     saveField () {
       const options = {
         name: this.field.name,
-        fieldId: this.id
+        fieldId: this.id,
+        shape: this.fieldShape
       }
-      this.$store.dispatch('editStore/saveVisualToField', {fieldId: this.id, type: this.selectedVisual})
-      this.$store.dispatch('editStore/saveFieldToModel', options)
+      this.$store.dispatch('modelStore/saveVisualToField', {fieldId: this.id, type: this.selectedVisual})
+      this.$store.dispatch('modelStore/saveFieldToModel', options)
     },
     addFieldValue () {
-      this.$store.dispatch('editStore/addValueToField', this.field.id)
+      this.$store.dispatch('modelStore/addValueToField', this.field.id)
     },
     deleteField () {
       const options = {
         fieldId: this.id
       }
-      this.$store.dispatch('editStore/deleteField', options)
+      this.$store.dispatch('modelStore/deleteField', options)
     }
   },
   components: {
@@ -66,6 +81,7 @@ export default {
   },
   created () {
     this.selectedVisual = this.field.transform.type
+    this.fieldShape = this.field.shape || this.shape
   }
 }
 </script>
@@ -78,6 +94,11 @@ export default {
     padding: 20px 40px;
     margin-bottom: 15px;
     border-bottom: 1px solid #848484;
+  }
+
+  .button-row {
+    width: 100%;
+    text-align: right;
   }
 
   label, input {

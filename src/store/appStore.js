@@ -47,6 +47,9 @@ export default {
       const modelById = getters.getModelById(model.id)
       modelById.name = model.name
       modelById.fields = model.fields
+      modelById.shape = model.shape
+      modelById.stroke = model.stroke
+      modelById.fill = model.fill
       window.localStorage.setItem('models', JSON.stringify(state.models))
     },
     deleteModel ({state, commit, getters}, id) {

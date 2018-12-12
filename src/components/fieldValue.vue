@@ -16,6 +16,7 @@
       <label>visual value</label>
       <input type="text" v-model="visualValue" @change="saveVisualValue">
     </div>
+    <div v-if="isColor" class="colormarker" :style="{backgroundColor: visualValue}"></div>
   </div>
 </template>
 
@@ -32,10 +33,10 @@ export default {
   },
   computed: {
     field () {
-      return this.$store.getters['editStore/getFieldById'](this.fieldId)
+      return this.$store.getters['modelStore/getFieldById'](this.fieldId)
     },
     value () {
-      return this.$store.getters['editStore/getFieldValueById'](this.id, this.field) || {name: 'value'}
+      return this.$store.getters['modelStore/getFieldValueById'](this.id, this.field) || {name: 'value'}
     },
     selectedVisual () {
       return visualTypes.filter(i => {
@@ -47,6 +48,9 @@ export default {
     },
     isMultipleValue () {
       return typeof this.selectedVisualValue === 'object'
+    },
+    isColor () {
+      return this.selectedVisual && this.selectedVisual.type.includes('Color')
     }
   },
   methods: {
@@ -56,14 +60,14 @@ export default {
         id: this.id,
         fieldId: this.fieldId
       }
-      this.$store.dispatch('editStore/saveValueToField', options)
+      this.$store.dispatch('modelStore/saveValueToField', options)
     },
     deleteValue () {
       const options = {
         id: this.id,
         fieldId: this.fieldId
       }
-      this.$store.dispatch('editStore/deleteValueOfField', options)
+      this.$store.dispatch('modelStore/deleteValueOfField', options)
     },
     saveVisualValue () {
       const options = {
@@ -72,7 +76,7 @@ export default {
         valueId: this.id,
         fieldId: this.fieldId
       }
-      this.$store.dispatch('editStore/saveVisualToField', options)
+      this.$store.dispatch('modelStore/saveVisualToField', options)
     }
   },
   created () {
@@ -80,7 +84,7 @@ export default {
   },
   watch: {
     selectedVisualValue () {
-      this.$store.dispatch('editStore/resetVisualsOfFiels', this.fieldId)
+      this.$store.dispatch('modelStore/resetVisualsOfFiels', this.fieldId)
       if (this.isMultipleValue) {
         this.visualValue = ''
       } else {
@@ -114,5 +118,10 @@ export default {
 
   button {
     background-color: #020202;
+  }
+
+  .colormarker {
+    width: 20px;
+    height: 20px;
   }
 </style>
