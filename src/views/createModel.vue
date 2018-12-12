@@ -2,11 +2,15 @@
   <main>
     <div class="button-wrapper">
       <router-link :to="{name: 'ModelData', params: {id: model.id}}"
-                                             class="button show">
-      see model data
-    </router-link>
+                   class="button show">
+        see model data
+      </router-link>
       <button @click="sendModelForm" class="save-button">save model</button>
       <button @click="addField" class="add-button">add new field</button>
+      <router-link :to="{name: 'ShapeEditor', params: {id: model.id}}"
+                   class="button shape">
+        edit layout
+      </router-link>
     </div>
     <div class="model-details">
       <label>model name</label>
@@ -14,7 +18,7 @@
       <div class="basic-visuals">
         <div>
           <label>basic shape</label>
-          <select v-model="basicShape">
+          <select v-model="model.shape">
             <option :key="index" v-for="(visual, index) in shapes"
                     :value="visual">{{visual}}</option>
           </select>
@@ -25,12 +29,12 @@
         </div>
         <div>
           <label>basic stroke</label>
-          <input type="text" v-model="strokeColor">
+          <input type="text" v-model="model.stroke">
         </div>
       </div>
     </div>
     <div :key="field.id" v-for="field in model.fields">
-      <field-input :id="field.id" :shape="basicShape"/>
+      <field-input :id="field.id" :shape="model.shape"/>
     </div>
   </main>
 </template>
@@ -43,11 +47,7 @@ export default {
   name: 'createModel',
   data () {
     return {
-      id: this.$route.params.id,
-      basicVisuals: ['Shape', 'FillColor', 'StrokeColor'],
-      basicShape: '',
-      basicFill: '',
-      basicStroke: ''
+      id: this.$route.params.id
     }
   },
   computed: {
@@ -55,40 +55,19 @@ export default {
       return this.$store.state.modelStore.model
     },
     shapes () {
-      return this.getVisualType('Shape')
-    },
-    fillColor: {
-      get () {
-        return this.model.fill || this.getVisualType('FillColor')
-      },
-      set (value) {
-        this.$store.commit('modelStore/setFill', value)
-      }
-    },
-    strokeColor: {
-      get () {
-        return this.model.stroke || this.getVisualType('StrokeColor')
-      },
-      set (value) {
-        this.$store.commit('modelStore/setStroke', value)
-      }
+      const shapes = visualTypes.filter(i => {
+        return i.type === 'Shape'
+      }).pop()
+      return shapes.mappedValue
     }
   },
   methods: {
-    getVisualType (type) {
-      const visual = visualTypes.filter(i => {
-        return i.type === type
-      }).pop()
-      return visual.mappedValue
-    },
     sendModelForm () {
-      const data = {
-        name: this.model.name,
-        shape: this.basicShape,
-        fill: this.model.fill
-      }
-      console.log(data)
-      this.$store.dispatch('modelStore/updateModelData', data)
+      this.$store.commit('modelStore/setName', this.model.name)
+      this.$store.commit('modelStore/setFill', this.model.fill)
+      this.$store.commit('modelStore/setStroke', this.model.stroke)
+      this.$store.commit('modelStore/setShape', this.model.shape)
+      this.$store.dispatch('modelStore/updateModelData')
     },
     addField () {
       this.$store.dispatch('modelStore/addFieldToModel')
@@ -97,8 +76,6 @@ export default {
   created () {
     const id = this.$route.params.id
     this.$store.dispatch('modelStore/refreshModel', id)
-
-    this.basicShape = this.model.shape
   },
   components: {
     fieldInput
@@ -153,5 +130,9 @@ export default {
   .colormarker {
     width: 20px;
     height: 20px;
+  }
+
+  .shape {
+    background-color: #f33c6d;
   }
 </style>

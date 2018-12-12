@@ -36,6 +36,9 @@ export default {
     setFieldToModel (state, field) {
       state.model.fields.push(field)
     },
+    setName (state, name) {
+      state.model.name = name
+    },
     setShape (state, shape) {
       state.model.shape = shape
     },
@@ -64,48 +67,41 @@ export default {
       const index = field.fieldValues.indexOf(value)
       field.fieldValues.splice(index, 1)
 
-      dispatch('saveModeltoModelList')
+      dispatch('updateModelData')
     },
     resetVisualsOfFiels ({getters, dispatch}, fieldId) {
       const field = getters.getFieldById(fieldId)
       field.transform = initTransform
-      dispatch('saveModeltoModelList')
+      dispatch('updateModelData')
     },
     saveVisualToField ({getters, dispatch}, {type, mappedValue = '', valueId = '', fieldId}) {
       const field = getters.getFieldById(fieldId)
       field.transform.type = type
       field.transform.values[valueId] = new Visual(type, mappedValue)
-      dispatch('saveModeltoModelList')
+      dispatch('updateModelData')
     },
     addFieldToModel ({commit, dispatch}) {
       const field = new Field()
       commit('setFieldToModel', field)
-      dispatch('saveModeltoModelList')
+      dispatch('updateModelData')
     },
-    saveFieldToModel ({getters, dispatch}, {name, shape, fill, fieldId}) {
+    saveFieldToModel ({getters, dispatch}, {name, shape, fieldId}) {
       const field = getters.getFieldById(fieldId)
       field.name = name
       field.shape = shape
-      field.fill = fill
-      dispatch('saveModeltoModelList')
+      dispatch('updateModelData')
     },
     deleteField ({state, getters, dispatch}, {fieldId}) {
       const field = getters.getFieldById(fieldId)
       const index = state.model.fields.indexOf(field)
       state.model.fields.splice(index, 1)
-      dispatch('saveModeltoModelList')
-    },
-    updateModelData ({dispatch, state}, {name, shape}) {
-      state.model.name = name
-      state.model.shape = shape
-      dispatch('saveModeltoModelList')
-      // dispatch('appStore/setModelList', { root: true })
+      dispatch('updateModelData')
     },
     refreshModel ({commit}, id) {
       const model = JSON.parse(window.localStorage.getItem(id))
       commit('setModel', model)
     },
-    saveModeltoModelList ({state, dispatch}) {
+    updateModelData ({state, dispatch}) {
       console.log(state.model)
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
       dispatch('appStore/updateModel', state.model, { root: true })

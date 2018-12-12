@@ -28,12 +28,15 @@ a {
 
 button, .button {
   display: inline-block;
+  height: 44px;
   padding: 10px;
   font-size: 18px;
   color: #fff;
   border: none;
   cursor: pointer;
-  line-height: 1.2;
+  line-height: 24px;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .add {

@@ -5,6 +5,8 @@ import CreateModel from '../views/createModel.vue'
 import Model from '../views/model.vue'
 import ModelData from '../views/modelData.vue'
 import Record from '../views/record.vue'
+import ShapeEditor from '../views/shapeEditor.vue'
+
 
 Vue.use(Router)
 
@@ -37,6 +39,12 @@ export default new Router({
       path: '/modelData/:id',
       name: 'ModelData',
       component: ModelData,
+      params: true
+    },
+    {
+      path: '/shapeEditor/:id',
+      name: 'ShapeEditor',
+      component: ShapeEditor,
       params: true
     }
   ]
