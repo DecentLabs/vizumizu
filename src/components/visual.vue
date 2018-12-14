@@ -13,11 +13,11 @@ export default {
       shape: this.set.shape || '',
       fillcolor: this.set.fillcolor,
       strokecolor: this.set.strokecolor || '#000',
-      strokesize: this.set.strokesize,
+      strokesize: this.set.strokesize || 2,
       stroketype: this.set.stroketype,
       opacity: this.set.opacity,
       rotation: this.set.rotation,
-      size: this.set.size,
+      size: this.set.size / 2,
       canvas: null,
       ctx: null
     }
@@ -39,22 +39,22 @@ export default {
       }
     },
     drawRect () {
-      const margin = 30
+      const margin = 10 + this.size
       this.ctx.rect(margin, margin, this.canvas.width - (2 * margin), this.canvas.height - (2 * margin))
       this.ctx.fill()
       this.ctx.stroke()
     },
     drawCircle () {
-      const margin = 20
+      const margin = this.size
       this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.canvas.width / 2 - margin, 0, 2 * Math.PI)
       this.ctx.fill()
       this.ctx.stroke()
     },
     drawTriangle () {
       this.ctx.beginPath()
-      this.ctx.moveTo(20, this.canvas.height - 20)
-      this.ctx.lineTo(this.canvas.width / 2, 40)
-      this.ctx.lineTo(this.canvas.width - 20, this.canvas.height - 20)
+      this.ctx.moveTo(this.size, this.canvas.height - this.size)
+      this.ctx.lineTo(this.canvas.width / 2, this.size * 2)
+      this.ctx.lineTo(this.canvas.width - this.size, this.canvas.height - this.size)
       this.ctx.closePath()
       this.ctx.fill()
       this.ctx.stroke()

@@ -76,7 +76,6 @@ export default {
   },
   watch: {
     selectedModel () {
-      console.log(this.selectedModel)
       this.selectedModelsFields = this.selectedModel.fields.map(field => (
         {
           data: field,
@@ -86,6 +85,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('recordStore/setRecordList')
     this.$store.dispatch('appStore/setModelList')
   }
 }

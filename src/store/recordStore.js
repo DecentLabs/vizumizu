@@ -8,13 +8,6 @@ export default {
       return (id) => {
         return state.records.filter(item => item.model === id).map(record => record.values)
       }
-    },
-    getFieldValuesOfRecords (state) {
-      return records => {
-        return records.map(record => {
-          return record.values
-        })
-      }
     }
   },
   mutations: {
@@ -28,6 +21,7 @@ export default {
   actions: {
     addRecord ({state, commit}, record) {
       commit('addRecord', record)
+      console.log(state.records)
       localStorage.setItem('records', JSON.stringify(state.records))
     },
     setRecordList ({commit}) {

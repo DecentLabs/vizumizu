@@ -102,7 +102,6 @@ export default {
       commit('setModel', model)
     },
     updateModelData ({state, dispatch}) {
-      console.log(state.model)
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
       dispatch('appStore/updateModel', state.model, { root: true })
     }

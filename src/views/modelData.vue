@@ -5,9 +5,9 @@
                  class="button edit">
       edit model
     </router-link>
-    <!--<div class="legend">-->
-      <!--<p v-for="item in transforms"> {{item}}</p>-->
-    <!--</div>-->
+    <div class="legend">
+      <p v-for="item in transforms"> {{item.values}}</p>
+    </div>
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
     </div>
@@ -34,6 +34,9 @@ export default {
     model () {
       return this.$store.getters['appStore/getModelById'](this.id)
     },
+    field () {
+      return (id) => this.model.fields.filter(field => field.id === id).pop()
+    },
     visualsets () {
       return this.records.map(record => {
         return record.map(item => this.mapVisual(item.fieldId, item.fieldValueId)).reduce((acc, curr) => {
@@ -45,7 +48,7 @@ export default {
   },
   methods: {
     mapVisual (fieldId, fieldValue) {
-      const field = this.model.fields.filter(field => field.id === fieldId).pop()
+      const field = this.field(fieldId)
       const transform = field.transform.values[fieldValue]
       return {[transform.type.toLowerCase()]: transform.mappedValue}
     }
