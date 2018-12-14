@@ -3,7 +3,7 @@ import rectangle from '../assets/svg/rectangle.svg'
 import circle from '../assets/svg/circle.svg'
 import triangle from '../assets/svg/triangle.svg'
 
-export default [
+const images = [
   {
     name: 'wine3',
     width: 34,
@@ -29,3 +29,9 @@ export default [
     src: triangle
   }
 ]
+
+export default images
+
+export function findByName (name) {
+  return images.find(image => image.name === name)
+}

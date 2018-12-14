@@ -76,7 +76,6 @@ export default {
     },
     saveVisualToField ({getters, dispatch}, {type, mappedValue = '', valueId = '', fieldId}) {
       const field = getters.getFieldById(fieldId)
-      field.transform.type = type
       field.transform.values[valueId] = new Visual(type, mappedValue)
       dispatch('updateModelData')
     },

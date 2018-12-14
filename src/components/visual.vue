@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <canvas ref="canvas" width="100" height="100"></canvas>
-  </div>
+  <image :href="image.src" :style="style"/>
 </template>
 
 <script>
+import { findByName } from '../data/images.js'
+
 export default {
   name: 'visual',
   props: ['set'],
@@ -19,10 +19,14 @@ export default {
       rotation: this.set.rotation,
       size: this.set.size / 2,
       canvas: null,
-      ctx: null
+      ctx: null,
+      image: findByName(this.set.shape)
     }
   },
   computed: {
+    style () {
+      return `fill:${this.fillcolor}, stroke:${this.strokecolor}`
+    }
   },
   methods: {
     drawShape () {
@@ -65,7 +69,7 @@ export default {
       this.ctx.lineWidth = this.strokesize * 3
     }
   },
-  mounted () {
+  _mounted () {
     this.canvas = this.$el.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
     this.initStyle()

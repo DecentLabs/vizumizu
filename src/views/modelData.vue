@@ -6,10 +6,12 @@
       edit model
     </router-link>
     <div class="legend">
-      <p v-for="item in transforms"> {{item.values}}</p>
+      <p v-for="item in transforms">{{item}}</p>
     </div>
     <div class="visual-grid">
-      <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
+      <svg>
+        <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
+      </svg>
     </div>
   </main>
 </template>
@@ -48,6 +50,7 @@ export default {
   },
   methods: {
     mapVisual (fieldId, fieldValue) {
+      console.log(fieldId, fieldValue)
       const field = this.field(fieldId)
       const transform = field.transform.values[fieldValue]
       return {[transform.type.toLowerCase()]: transform.mappedValue}
