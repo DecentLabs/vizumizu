@@ -9,14 +9,13 @@
       <p v-for="item in transforms">{{item}}</p>
     </div>
     <div class="visual-grid">
-      <vector image="rect"></vector>
+      <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
     </div>
   </main>
 </template>
 
 <script>
 import visual from '@/components/visual'
-import vector from '@/components/vector'
 
 export default {
   name: 'ModelData',
@@ -62,8 +61,7 @@ export default {
     this.transforms = this.model.fields.map(field => field.transform)
   },
   components: {
-    visual,
-    vector
+    visual
   }
 }
 </script>

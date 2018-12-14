@@ -1,5 +1,5 @@
 <template>
-  <image :href="image.src" :style="style"/>
+  <div v-once v-html="image.src" :style="{fill:fillcolor, stroke: strokecolor}"></div>
 </template>
 
 <script>
