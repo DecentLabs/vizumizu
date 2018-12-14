@@ -7,7 +7,6 @@ import ModelData from '../views/modelData.vue'
 import Record from '../views/record.vue'
 import ShapeEditor from '../views/shapeEditor.vue'
 
-
 Vue.use(Router)
 
 export default new Router({
