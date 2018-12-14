@@ -27,6 +27,9 @@ export default {
       return (valueId, field) => {
         return field.fieldValues.filter(value => value.id === valueId).pop()
       }
+    },
+    getAllFields (state) {
+      return state.model.fields
     }
   },
   mutations: {

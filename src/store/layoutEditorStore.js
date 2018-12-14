@@ -1,6 +1,7 @@
-import images from './images.js'
+import { findByName } from '../data/images.js'
 import { Solver, Strength, Operator, Constraint, Expression } from 'kiwi.js'
 import LayoutItem from '../data/LayoutItem.js'
+import getters from './layoutGetters/getters.js'
 
 const LAYOUT_ACTIONS = {
   setImageByName: 'setImageByName',
@@ -31,7 +32,6 @@ export default {
   state: {
     fields: [],
     solver: new Solver(),
-    images,
     constrains: new Map()
   },
   mutations: {
@@ -44,18 +44,21 @@ export default {
       state.constrains = new Map()
     },
     [LAYOUT_MUTATIONS.addField] (state, field) {
-      const defaultPosition = [20, 40]
-      const layoutItem = new LayoutItem(state.solver)
-      state.fields = state.fields.concat({
-        id: field.id,
-        name: field.name,
-        image: field.image,
-        position: defaultPosition,
-        layoutItem
-      })
+      if (field.shape) {
+        const defaultPosition = [20, 40]
+        const layoutItem = new LayoutItem(state.solver)
+        const layoutField = {
+          id: field.id,
+          name: field.name,
+          image: findByName(field.shape),
+          position: defaultPosition,
+          layoutItem
+        }
+        state.fields = state.fields.concat(layoutField)
 
-      layoutItem.setPosition(defaultPosition)
-      layoutItem.setSize([field.image.width, field.image.height])
+        layoutItem.setPosition(defaultPosition)
+        layoutItem.setSize([layoutField.image.width, layoutField.image.height])
+      }
     },
     [LAYOUT_MUTATIONS.updatePosition] (state, { field, position }) {
       field.layoutItem.setPosition(position)
@@ -114,7 +117,8 @@ export default {
 
       commit(LAYOUT_MUTATIONS.updateSolver)
     }
-  }
+  },
+  getters
 }
 
 export { LAYOUT_ACTIONS }
