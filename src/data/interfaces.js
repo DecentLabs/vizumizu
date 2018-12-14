@@ -1,4 +1,5 @@
 import uuid from 'uuidv4'
+import images from './images.js'
 
 class Model {
   constructor (id, name) {
@@ -104,7 +105,7 @@ const visualTypes = [
   },
   {
     type: 'Shape',
-    mappedValue: ['circle', 'triangle', 'rect']
+    mappedValue: images.map(image => image.name)
   },
   {
     type: 'Rotation',
