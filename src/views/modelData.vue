@@ -6,7 +6,7 @@
       edit model
     </router-link>
     <div class="legend">
-      <p v-for="item in transforms">{{item}}</p>
+      <!--<p v-for="item in transforms"> {{item.values}}</p>-->
     </div>
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     mapVisual (fieldId, fieldValue) {
-      console.log(fieldId, fieldValue)
       const field = this.field(fieldId)
       const transform = field.transform.values[fieldValue]
       return {[transform.type.toLowerCase()]: transform.mappedValue}
@@ -57,7 +56,6 @@ export default {
   created () {
     this.$store.dispatch('appStore/setModelList')
     this.$store.dispatch('recordStore/setRecordList')
-    console.log(localStorage.getItem('models'))
     this.transforms = this.model.fields.map(field => field.transform)
   },
   components: {
@@ -71,7 +69,7 @@ export default {
     display: grid;
     width: 600px;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(10, 150px);
+    grid-template-rows: repeat(10, 200px);
     grid-auto-flow: dense;
     margin: 0 auto;
   }
