@@ -97,6 +97,7 @@ export default {
       }
     },
     updateModelData ({ state, dispatch }) {
+      dispatch('appStore/updateModel', state.model, { root: true })
       window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
     }
   }
