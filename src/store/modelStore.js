@@ -22,6 +22,9 @@ export default {
       return (valueId, field) => {
         return field.fieldValues.find(value => value.id === valueId)
       }
+    },
+    getAllFields (state) {
+      return state.model.fields
     }
   },
   mutations: {

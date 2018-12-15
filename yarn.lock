@@ -78,6 +78,11 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@shopify/draggable@^1.0.0-beta.8":
+  version "1.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@shopify/draggable/-/draggable-1.0.0-beta.8.tgz#2eb3c2f72298ce3e53fe16f34ab124cc495cd4fc"
+  integrity sha512-9IeBPQM93Ad4qFKUopwuTClzoST/1OId4MaSd/8FB5ScCL2tl25UaOGNR8E2hjiL7xK4LN5+I1Ews6amS7YAiA==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -3437,6 +3442,11 @@ kind-of@^5.0.0:
 kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
+
+kiwi.js@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/kiwi.js/-/kiwi.js-1.1.0.tgz#c9764b7c781aa3437a6eb20fe51d07f3f816a7a8"
+  integrity sha512-V1L6/tKmGcabUHjHxBFJAJCZya8rJa0YY1MZLyxkpm9C8nKw0h/Hec40QJIe5ZZoS4JjoVWkMwzFQWBcziqS+g==
 
 last-call-webpack-plugin@^2.1.2:
   version "2.1.2"
