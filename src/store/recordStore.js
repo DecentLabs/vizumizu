@@ -21,7 +21,6 @@ export default {
   actions: {
     addRecord ({state, commit}, record) {
       commit('addRecord', record)
-      console.log(state.records)
       localStorage.setItem('records', JSON.stringify(state.records))
     },
     setRecordList ({commit}) {

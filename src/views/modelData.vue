@@ -5,8 +5,16 @@
                  class="button edit">
       edit model
     </router-link>
-    <div class="legend">
-      <!--<p v-for="item in transforms"> {{item.values}}</p>-->
+    <div>
+      <div v-for="f in model.fields">
+        {{f.fieldValues}}
+        <div v-for="v in f.fieldValues">
+          {{v.name}}
+          {{f.transform[v.id]}}
+          </div>
+        {{f.transform}}
+        <hr>
+      </div>
     </div>
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
@@ -19,11 +27,6 @@ import visual from '@/components/visual'
 
 export default {
   name: 'ModelData',
-  data () {
-    return {
-      transforms: []
-    }
-  },
   computed: {
     id () {
       return this.$route.params.id
@@ -34,8 +37,10 @@ export default {
     model () {
       return this.$store.getters['appStore/getModelById'](this.id)
     },
-    field () {
-      return (id) => this.model.fields.filter(field => field.id === id).pop()
+    values () {
+      const vals = []
+      this.model.fields.forEach(field => field.fieldValues.forEach(i => vals.push({[i.id]: i.name})))
+      return vals
     },
     visualsets () {
       return this.records.map(record => {
@@ -47,8 +52,11 @@ export default {
     }
   },
   methods: {
+    getFieldById (id) {
+      return this.model.fields.find(field => field.id === id)
+    },
     mapVisual (fieldId, fieldValue) {
-      const field = this.field(fieldId)
+      const field = this.getFieldById(fieldId)
       const transform = field.transform.values[fieldValue]
       return {[transform.type.toLowerCase()]: transform.mappedValue}
     }
@@ -56,8 +64,8 @@ export default {
   created () {
     this.$store.dispatch('appStore/setModelList')
     this.$store.dispatch('recordStore/setRecordList')
-    this.transforms = this.model.fields.map(field => field.transform)
-  },
+    console.log(this.values, 'vals')
+    console.log(this.visualsets, 'visualsets')  },
   components: {
     visual
   }

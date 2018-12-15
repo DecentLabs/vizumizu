@@ -13,7 +13,7 @@ export default {
       shape: this.set.shape || '',
       fillcolor: this.set.fillcolor,
       strokecolor: this.set.strokecolor || '#000',
-      strokesize: this.set.strokesize || 2,
+      strokesize: this.set.strokesize || 5,
       stroketype: this.set.stroketype,
       opacity: this.set.opacity || 1,
       rotation: this.set.rotation || 0,
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     style () {
-      const scale = (50 + parseInt(this.size, 10)) / 100
+      const scale = parseInt(this.size, 10) / 100
 
       return {
         fill: this.fillcolor,
@@ -39,6 +39,6 @@ export default {
 
 <style scoped>
   .visual {
-    padding: 15%;
+    padding: 10%;
   }
 </style>
