@@ -34,7 +34,7 @@
       </div>
     </div>
     <div :key="field.id" v-for="field in model.fields">
-      <field-input :id="field.id" :shape="model.shape"/>
+      <field-input :id="field.id" />
     </div>
   </main>
 </template>

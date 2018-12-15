@@ -16,6 +16,7 @@
       <select v-model="fieldShape">
         <option :key="index" v-for="(item, index) in shapes"
                 :value="item">{{item}}</option>
+        <option :value="null" selected>model</option>
       </select>
     </div>
     <div class="field-values">
@@ -42,7 +43,7 @@ export default {
     return {
       visualTypes: visualTypes.map(i => i.type),
       selectedVisual: '',
-      fieldShape: ''
+      fieldShape: null
     }
   },
   computed: {
@@ -63,6 +64,8 @@ export default {
         fieldId: this.id,
         shape: this.fieldShape
       }
+
+      console.log(options)
       this.$store.dispatch('modelStore/saveVisualToField', {fieldId: this.id, type: this.selectedVisual})
       this.$store.dispatch('modelStore/saveFieldToModel', options)
     },
@@ -81,7 +84,7 @@ export default {
   },
   created () {
     this.selectedVisual = this.field.transform.type
-    this.fieldShape = this.field.shape || this.shape
+    this.fieldShape = this.field.shape || null
   }
 }
 </script>

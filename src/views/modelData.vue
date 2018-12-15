@@ -5,17 +5,6 @@
                  class="button edit">
       edit model
     </router-link>
-    <div>
-      <div v-for="f in model.fields">
-        {{f.fieldValues}}
-        <div v-for="v in f.fieldValues">
-          {{v.name}}
-          {{f.transform[v.id]}}
-          </div>
-        {{f.transform}}
-        <hr>
-      </div>
-    </div>
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
     </div>
@@ -64,8 +53,7 @@ export default {
   created () {
     this.$store.dispatch('appStore/setModelList')
     this.$store.dispatch('recordStore/setRecordList')
-    console.log(this.values, 'vals')
-    console.log(this.visualsets, 'visualsets')  },
+  },
   components: {
     visual
   }

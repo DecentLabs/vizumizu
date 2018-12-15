@@ -20,12 +20,12 @@ export default {
   getters: {
     getFieldById (state) {
       return (id) => {
-        return state.model.fields.filter(field => field.id === id).pop()
+        return state.model.fields.find(field => field.id === id)
       }
     },
     getFieldValueById () {
       return (valueId, field) => {
-        return field.fieldValues.filter(value => value.id === valueId).pop()
+        return field.fieldValues.find(value => value.id === valueId)
       }
     }
   },
