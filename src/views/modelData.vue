@@ -5,6 +5,19 @@
                  class="button edit">
       edit model
     </router-link>
+    <div class="legend">
+      <div :key="index" v-for="(field, index) in model.fields" class="field">
+        <h3>{{field.name}}</h3>
+        <div class="legend-visuals">
+          <div :key="i" v-for="(value, i) in field.fieldValues">
+            <p>{{value.name}}</p>
+            <div class="visual-wrapper">
+              <visual :set="getLegendVisual(field, value)"></visual>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="visual-grid">
       <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
     </div>
@@ -26,11 +39,6 @@ export default {
     model () {
       return this.$store.getters['appStore/getModelById'](this.id)
     },
-    values () {
-      const vals = []
-      this.model.fields.forEach(field => field.fieldValues.forEach(i => vals.push({[i.id]: i.name})))
-      return vals
-    },
     visualsets () {
       return this.records.map(record => {
         return record.map(item => this.mapVisual(item.fieldId, item.fieldValueId)).reduce((acc, curr) => {
@@ -43,6 +51,14 @@ export default {
   methods: {
     getFieldById (id) {
       return this.model.fields.find(field => field.id === id)
+    },
+    getLegendVisual (field, fieldValue) {
+      const type = field.transform.values[fieldValue.id].type.toLowerCase()
+      const value = field.transform.values[fieldValue.id].mappedValue
+      return {
+        [type]: value,
+        shape: field.shape
+      }
     },
     mapVisual (fieldId, fieldValue) {
       const field = this.getFieldById(fieldId)
@@ -67,6 +83,35 @@ export default {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(10, 200px);
     grid-auto-flow: dense;
+    margin: 0 auto;
+  }
+
+  .legend {
+    display: flex;
+    width: 70%;
+    flex-flow: row wrap;
+    margin: 0 auto;
+  }
+
+  .legend .field {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .legend .field h3 {
+    width: 100%;
+    text-align: left;
+  }
+
+  .legend-visuals {
+    width: 100%;
+    display: flex;
+  }
+
+  .legend .visual-wrapper {
+    width: 60px;
+    height: 60px;
     margin: 0 auto;
   }
 </style>

@@ -10,14 +10,14 @@ export default {
   props: ['set'],
   data () {
     return {
-      shape: this.set.shape || '',
-      fillcolor: this.set.fillcolor,
+      shape: this.set.shape || 'circle',
+      fillcolor: this.set.fillcolor || 'none',
       strokecolor: this.set.strokecolor || '#000',
       strokesize: this.set.strokesize || 5,
       stroketype: this.set.stroketype,
       opacity: this.set.opacity || 1,
       rotation: this.set.rotation || 0,
-      size: this.set.size || 1,
+      size: this.set.size || 100,
       image: findByName(this.set.shape)
     }
   },
@@ -38,7 +38,15 @@ export default {
 </script>
 
 <style scoped>
-  .visual {
+  .visual,
+  .visual svg {
+    width: 100%;
+    height: 100%;
     padding: 10%;
+    box-sizing: border-box;
+  }
+
+  svg {
+    width: 100px;
   }
 </style>
