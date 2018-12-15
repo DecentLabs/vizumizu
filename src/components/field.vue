@@ -82,7 +82,7 @@ export default {
   components: {
     fieldValue
   },
-  created () {
+  mounted () {
     this.selectedVisual = this.field.transform.type
     this.fieldShape = this.field.shape || null
   }

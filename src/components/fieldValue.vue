@@ -79,7 +79,7 @@ export default {
       this.$store.dispatch('modelStore/saveVisualToField', options)
     }
   },
-  created () {
+  mounted () {
     this.visualValue = this.field.transform.values[this.id].mappedValue
   },
   watch: {

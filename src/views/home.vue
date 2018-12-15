@@ -43,7 +43,7 @@ export default {
       this.$store.dispatch('appStore/deleteModel', id)
     }
   },
-  created () {
+  mounted () {
     this.$store.dispatch('appStore/setModelList')
   }
 }

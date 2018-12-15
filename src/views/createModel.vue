@@ -20,7 +20,8 @@
           <label>basic shape</label>
           <select v-model="model.shape">
             <option :key="index" v-for="(visual, index) in shapes"
-                    :value="visual">{{visual}}</option>
+                    :value="visual">{{visual}}
+            </option>
           </select>
         </div>
         <div>
@@ -34,14 +35,14 @@
       </div>
     </div>
     <div :key="field.id" v-for="field in model.fields">
-      <field-input :id="field.id" />
+      <field-input :id="field.id"/>
     </div>
   </main>
 </template>
 
 <script>
 import fieldInput from '@/components/field.vue'
-import {visualTypes} from '../data/interfaces'
+import { visualTypes } from '../data/interfaces'
 
 export default {
   name: 'createModel',
@@ -73,9 +74,8 @@ export default {
       this.$store.dispatch('modelStore/addFieldToModel')
     }
   },
-  created () {
-    const id = this.$route.params.id
-    this.$store.dispatch('modelStore/refreshModel', id)
+  mounted () {
+    this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
   },
   components: {
     fieldInput

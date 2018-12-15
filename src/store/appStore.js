@@ -1,4 +1,4 @@
-import { Model, ModelHead } from '../data/interfaces'
+import { ModelHead } from '../data/interfaces'
 
 export default {
   namespaced: true,
@@ -31,7 +31,7 @@ export default {
     updateModel (state, model) {
       state.models = state.models.map(stateModel => {
         if (stateModel.id === model.id) {
-          return new ModelHead(model.id, stateModel.name)
+          return new ModelHead(model.id, model.name)
         } else {
           return stateModel
         }

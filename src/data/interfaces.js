@@ -23,7 +23,7 @@ class Model extends ModelHead {
   }
 
   static load (o) {
-    if (o.id && o.name) {
+    if (o && o.id && o.name) {
       const newModel = Object.assign(new Model(), o)
       newModel.fields = newModel.fields.map(field => Field.load(field))
       return newModel
@@ -42,7 +42,7 @@ class Field {
   }
 
   static load (o) {
-    if (o.id) {
+    if (o && o.id) {
       const newField = Object.assign(new Field(), o)
       newField.fieldValues = newField.fieldValues.map(fieldValue => FieldValue.load(fieldValue))
       newField.transform = Transform.load(newField.transform)
@@ -59,7 +59,7 @@ class FieldValue {
   }
 
   static load (o) {
-    if (o.value) {
+    if (o && o.value) {
       const newFieldValue = new FieldValue()
       return Object.assign(newFieldValue, o)
     }
@@ -82,9 +82,11 @@ class Transform {
 
   static load (o) {
     const newTransform = new Transform()
-    Object.keys(o.values).forEach(key => {
-      newTransform.addVisual(key, Visual.load(o.values[key]))
-    })
+    if (o) {
+      Object.keys(o.values).forEach(key => {
+        newTransform.addVisual(key, Visual.load(o.values[key]))
+      })
+    }
     return newTransform
   }
 }
