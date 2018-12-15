@@ -1,4 +1,4 @@
-import {Model} from '../data/interfaces'
+import { Model, ModelHead } from '../data/interfaces'
 
 export default {
   namespaced: true,
@@ -9,7 +9,7 @@ export default {
   getters: {
     getModelById (state) {
       return (id) => {
-        return state.models.filter(model => model.id === id).pop()
+        return state.models.find(model => model.id === id)
       }
     },
     getModelsVisuals (state) {
@@ -22,41 +22,51 @@ export default {
     addModelToList (state, model) {
       state.models.push(model)
     },
-    setModels (state, model) {
-      state.models = model
+    setModels (state, models) {
+      state.models = models.map(jsonModel => ModelHead.load(jsonModel))
     },
-    removeModel (state, index) {
-      state.models.splice(index, 1)
+    removeModel (state, id) {
+      state.models = state.models.filter(stateModel => stateModel.id !== id)
+    },
+    updateModel (state, model) {
+      state.models = state.models.map(stateModel => {
+        if (stateModel.id === model.id) {
+          return new ModelHead(model.id, stateModel.name)
+        } else {
+          return stateModel
+        }
+      })
     }
   },
   actions: {
-    setModelList ({commit}) {
+    save ({ state }) {
+      window.localStorage.setItem('models', JSON.stringify(state.models))
+    },
+    initModel (context, model) {
+      window.localStorage.setItem(model.id, JSON.stringify(model))
+    },
+    load ({ commit }) {
       const models = JSON.parse(window.localStorage.getItem('models'))
       commit('setModels', models)
     },
-    createModel ({state, commit}) {
-      const model = new Model()
+    setModelList ({ dispatch }) {
+      dispatch('load')
+    },
+    createModel ({ state, commit, dispatch }) {
+      const model = new ModelHead()
       commit('addModelToList', model)
-      window.localStorage.setItem(model.id, JSON.stringify(model))
-      window.localStorage.setItem('models', JSON.stringify(state.models))
+      dispatch('save')
+      dispatch('initModel', model)
       return new Promise(resolve => resolve(model), err => console.log(err))
     },
-    updateModel ({state, commit, getters}, model) {
-      const models = JSON.parse(window.localStorage.getItem('models'))
-      commit('setModels', models)
-      const modelById = getters.getModelById(model.id)
-      modelById.name = model.name
-      modelById.fields = model.fields
-      modelById.shape = model.shape
-      modelById.stroke = model.stroke
-      modelById.fill = model.fill
-      window.localStorage.setItem('models', JSON.stringify(state.models))
+    updateModel ({ state, commit, getters, dispatch }, model) {
+      dispatch('load')
+      commit('updateModel', model)
+      dispatch('save')
     },
-    deleteModel ({state, commit, getters}, id) {
-      const model = getters.getModelById(id)
-      const index = state.models.indexOf(model)
-      commit('removeModel', index)
-      window.localStorage.setItem('models', JSON.stringify(state.models))
+    deleteModel ({ state, commit, getters, dispatch }, id) {
+      commit('removeModel', id)
+      dispatch('save')
     }
   }
 }

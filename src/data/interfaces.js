@@ -1,10 +1,20 @@
 import uuid from 'uuidv4'
 import images from './images.js'
 
-class Model {
+class ModelHead {
+  constructor (id = uuid(), name = 'untitled') {
+    this.id = id
+    this.name = name
+  }
+
+  static load (o) {
+    return Object.assign(new ModelHead(), o)
+  }
+}
+
+class Model extends ModelHead {
   constructor (id, name) {
-    this.id = id || uuid()
-    this.name = name || 'untitled'
+    super(id, name)
     this.fields = []
     this.shape = ''
     this.stroke = 'rgba()'
@@ -126,9 +136,11 @@ const visualTypes = [
 ]
 
 export {
+  ModelHead,
   Model,
   Field,
   FieldValue,
   Visual,
+  Transform,
   visualTypes
 }
