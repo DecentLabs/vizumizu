@@ -17,8 +17,8 @@ class Model extends ModelHead {
     super(id, name)
     this.fields = []
     this.shape = null
-    this.stroke = 'rgba()'
-    this.fill = 'rgba()'
+    this.stroke = 'rgba(18,118,193,1)'
+    this.fill = 'rgba(186,75,62,1)'
     this.hasRecordName = false
   }
 
@@ -59,7 +59,7 @@ class FieldValue {
   }
 
   static load (o) {
-    if (o && o.value) {
+    if (o && (o.value || o.id)) {
       const newFieldValue = new FieldValue()
       return Object.assign(newFieldValue, o)
     }
@@ -68,21 +68,19 @@ class FieldValue {
 }
 
 class Transform {
-  constructor (values = {}) {
+  constructor (type, values = {}) {
     this.values = values
+    this.type = type
   }
 
   addVisual (fieldValueId, visual) {
     this.values[fieldValueId] = visual
   }
 
-  get type () {
-    return Object.values(this.values)[0].type
-  }
-
   static load (o) {
     const newTransform = new Transform()
     if (o) {
+      newTransform.type = o.type
       Object.keys(o.values).forEach(key => {
         newTransform.addVisual(key, Visual.load(o.values[key]))
       })

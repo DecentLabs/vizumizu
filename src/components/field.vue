@@ -2,26 +2,27 @@
   <div class="field-row">
     <div>
       <label :for="id">Field name</label>
-      <input :id="id" type="text" v-model="field.name">
+      <input :id="id" type="text" v-model="name">
     </div>
     <div>
       <label>Field visual</label>
       <select v-model="selectedVisual">
         <option :key="index" v-for="(visual, index) in visualTypes"
-            :value="visual">{{visual}}</option>
+                :value="visual">{{visual}}
+        </option>
       </select>
     </div>
     <div>
       <label>Field shape</label>
-      <shape-select defaultOption="model" :selectedItem="field.shape" @onSelectChange="onShapeChange"></shape-select>
+      <shape-select defaultOption="model" :selectedItem="shape"
+                    @onSelectChange="onShapeChange"></shape-select>
     </div>
     <div class="field-values">
-      <!--<div :key="i" v-for="(val, i) in field.fieldValues">-->
-        <!--<field-value v-if="val !== null" :id="val.id" :fieldId="id" :visual="selectedVisual"/>-->
-      <!--</div>-->
+      <div :key="val.id" v-for="val in field.fieldValues">
+        <field-value :value="val" :field="field"/>
+      </div>
     </div>
     <div class="button-row">
-      <button @click="saveField" class="save-button">save field</button>
       <button @click="addFieldValue" class="add-button">add value</button>
       <button @click="deleteField" class="delete-button">X</button>
     </div>
@@ -31,29 +32,46 @@
 <script>
 import fieldValue from '@/components/fieldValue.vue'
 import shapeSelect from '@/components/shapeSelect.vue'
-
-import {visualTypes} from '../data/interfaces'
+import { Transform, visualTypes } from '../data/interfaces'
 
 export default {
   name: 'fieldInput',
-  props: ['id', 'shape'],
+  props: ['field'],
   data () {
     return {
       visualTypes: visualTypes.map(i => i.type),
-      selectedVisual: '',
-      fieldShape: null
+      shapes: visualTypes.find(i => i.type === 'Shape').mappedValue
     }
   },
   computed: {
-    field () {
-      return this.$store.getters['modelStore/getFieldById'](this.id)
+    id () {
+      return this.field.id
+    },
+    name: {
+      get () {
+        return this.field.name
+      },
+      set (value) {
+        this.$store.dispatch('modelStore/updateField', { id: this.field.id, name: value })
+      }
+    },
+    shape: {
+      get () {
+        return this.field.shape || null
+      }
+    },
+    selectedVisual: {
+      get () {
+        return this.field.transform && this.field.transform.type
+      },
+      set (value) {
+        this.$store.dispatch('modelStore/updateField', { id: this.field.id, transform: new Transform(value) })
+      }
     }
   },
   methods: {
     onShapeChange (shape) {
-      this.fieldShape = shape
-
-      this.saveField()
+      this.$store.dispatch('modelStore/updateField', { id: this.field.id, shape: shape })
     },
     saveField () {
       const options = {
@@ -62,26 +80,19 @@ export default {
         shape: this.fieldShape
       }
 
-      this.$store.dispatch('modelStore/saveVisualToField', {fieldId: this.id, type: this.selectedVisual})
+      this.$store.dispatch('modelStore/saveVisualToField', { fieldId: this.id, type: this.selectedVisual })
       this.$store.dispatch('modelStore/saveFieldToModel', options)
     },
     addFieldValue () {
       this.$store.dispatch('modelStore/addValueToField', this.id)
     },
     deleteField () {
-      const options = {
-        fieldId: this.id
-      }
-      this.$store.dispatch('modelStore/deleteField', options)
+      this.$store.dispatch('modelStore/deleteField', { fieldId: this.field.id })
     }
   },
   components: {
     fieldValue,
     shapeSelect
-  },
-  mounted () {
-    this.selectedVisual = this.field.transform !== undefined ? this.field.transform.type : visualTypes[0].type
-    this.fieldShape = this.field.shape || null
   }
 }
 </script>
