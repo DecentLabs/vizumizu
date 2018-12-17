@@ -18,7 +18,7 @@
       <div class="basic-visuals">
         <div>
           <label>basic shape</label>
-          <shape-select :options="shapes" defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="model.shape"></shape-select>
+          <shape-select defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="model.shape"></shape-select>
         </div>
         <div>
           <label>basic fill</label>

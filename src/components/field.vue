@@ -13,7 +13,7 @@
     </div>
     <div>
       <label>Field shape</label>
-      <shape-select :options="shapes" defaultOption="model" :selectedItem="field.shape" @onSelectChange="onShapeChange"></shape-select>
+      <shape-select defaultOption="model" :selectedItem="field.shape" @onSelectChange="onShapeChange"></shape-select>
     </div>
     <div class="field-values">
       <!--<div :key="i" v-for="(val, i) in field.fieldValues">-->
@@ -47,12 +47,6 @@ export default {
   computed: {
     field () {
       return this.$store.getters['modelStore/getFieldById'](this.id)
-    },
-    shapes () {
-      const shapes = visualTypes.filter(i => {
-        return i.type === 'Shape'
-      }).pop()
-      return shapes.mappedValue
     }
   },
   methods: {
