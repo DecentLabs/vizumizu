@@ -7,7 +7,7 @@ export default {
       id: '',
       name: '',
       fields: [],
-      shape: '',
+      shape: null,
       fill: '',
       stroke: ''
     }

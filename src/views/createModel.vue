@@ -18,11 +18,7 @@
       <div class="basic-visuals">
         <div>
           <label>basic shape</label>
-          <select v-model="model.shape">
-            <option :key="index" v-for="(visual, index) in shapes"
-                    :value="visual">{{visual}}
-            </option>
-          </select>
+          <shape-select :options="shapes" defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="model.shape"></shape-select>
         </div>
         <div>
           <label>basic fill</label>
@@ -42,6 +38,8 @@
 
 <script>
 import fieldInput from '@/components/field.vue'
+import shapeSelect from '@/components/shapeSelect.vue'
+
 import { visualTypes } from '../data/interfaces'
 
 export default {
@@ -63,6 +61,9 @@ export default {
     }
   },
   methods: {
+    onShapeChange (value) {
+      this.model.shape = value
+    },
     sendModelForm () {
       this.$store.commit('modelStore/setName', this.model.name)
       this.$store.commit('modelStore/setFill', this.model.fill)
@@ -78,7 +79,8 @@ export default {
     this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
   },
   components: {
-    fieldInput
+    fieldInput,
+    shapeSelect
   }
 }
 </script>

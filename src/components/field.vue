@@ -13,16 +13,12 @@
     </div>
     <div>
       <label>Field shape</label>
-      <select v-model="fieldShape">
-        <option :key="index" v-for="(item, index) in shapes"
-                :value="item">{{item}}</option>
-        <option :value="null" selected>model</option>
-      </select>
+      <shape-select :options="shapes" defaultOption="model" :selectedItem="field.shape" @onSelectChange="onShapeChange"></shape-select>
     </div>
     <div class="field-values">
-      <div :key="val.id" v-for="val in field.fieldValues">
-        <field-value :id="val.id" :fieldId="id" :visual="selectedVisual"/>
-      </div>
+      <!--<div :key="i" v-for="(val, i) in field.fieldValues">-->
+        <!--<field-value v-if="val !== null" :id="val.id" :fieldId="id" :visual="selectedVisual"/>-->
+      <!--</div>-->
     </div>
     <div class="button-row">
       <button @click="saveField" class="save-button">save field</button>
@@ -34,6 +30,8 @@
 
 <script>
 import fieldValue from '@/components/fieldValue.vue'
+import shapeSelect from '@/components/shapeSelect.vue'
+
 import {visualTypes} from '../data/interfaces'
 
 export default {
@@ -58,6 +56,11 @@ export default {
     }
   },
   methods: {
+    onShapeChange (shape) {
+      this.fieldShape = shape
+
+      this.saveField()
+    },
     saveField () {
       const options = {
         name: this.field.name,
@@ -65,12 +68,11 @@ export default {
         shape: this.fieldShape
       }
 
-      console.log(options)
       this.$store.dispatch('modelStore/saveVisualToField', {fieldId: this.id, type: this.selectedVisual})
       this.$store.dispatch('modelStore/saveFieldToModel', options)
     },
     addFieldValue () {
-      this.$store.dispatch('modelStore/addValueToField', this.field.id)
+      this.$store.dispatch('modelStore/addValueToField', this.id)
     },
     deleteField () {
       const options = {
@@ -80,10 +82,11 @@ export default {
     }
   },
   components: {
-    fieldValue
+    fieldValue,
+    shapeSelect
   },
   mounted () {
-    this.selectedVisual = this.field.transform.type
+    this.selectedVisual = this.field.transform !== undefined ? this.field.transform.type : visualTypes[0].type
     this.fieldShape = this.field.shape || null
   }
 }
