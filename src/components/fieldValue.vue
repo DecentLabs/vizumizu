@@ -2,46 +2,57 @@
   <div class="value-row">
     <div>
       <label :for="id">Value name</label>
-      <input :id="id" type="text" v-model="value.name" @change="saveValue">
+      <input :id="id" type="text" v-model="name">
       <button @click="deleteValue">X</button>
     </div>
     <div v-if="isMultipleValue">
       <label>visual value</label>
-      <select v-model="visualValue" @change="saveVisualValue">
+      <select v-model="visualValue">
         <option :key="index" v-for="(visual, index) in selectedVisualValue"
-                :value="visual">{{visual}}</option>
+                :value="visual">{{visual}}
+        </option>
       </select>
     </div>
     <div v-else>
       <label>visual value</label>
-      <input type="text" v-model="visualValue" @change="saveVisualValue">
+      <input type="text" v-model="visualValue">
     </div>
     <div v-if="isColor" class="colormarker" :style="{backgroundColor: visualValue}"></div>
   </div>
 </template>
 
 <script>
-import {visualTypes} from '../data/interfaces'
+import { visualTypes } from '../data/interfaces.js'
 
 export default {
   name: 'fieldValue',
-  props: ['id', 'fieldId', 'visual'],
+  props: ['field', 'value'],
   data () {
-    return {
-      visualValue: ''
-    }
+    return {}
   },
   computed: {
-    field () {
-      return this.$store.getters['modelStore/getFieldById'](this.fieldId)
+    id () {
+      return this.value.id
     },
-    value () {
-      return this.$store.getters['modelStore/getFieldValueById'](this.id, this.field) || {name: 'value'}
+    name: {
+      get () {
+        return this.value.name
+      },
+      set (newName) {
+        this.$store.dispatch('modelStore/updateValueOfField',
+          { field: this.field, value: { id: this.value.id, name: newName } })
+      }
+    },
+    visualValue: {
+      get () {},
+      set (value) {}
+    },
+    transform () {
+      return this.field.transform
     },
     selectedVisual () {
-      return visualTypes.filter(i => {
-        return i.type === this.visual
-      }).pop()
+      const transformType = this.transform && this.transform.type
+      return visualTypes.find(vt => vt.type === transformType)
     },
     selectedVisualValue () {
       return this.selectedVisual ? this.selectedVisual.mappedValue : ''
@@ -54,14 +65,6 @@ export default {
     }
   },
   methods: {
-    saveValue () {
-      const options = {
-        name: this.value.name,
-        id: this.id,
-        fieldId: this.fieldId
-      }
-      this.$store.dispatch('modelStore/saveValueToField', options)
-    },
     deleteValue () {
       const options = {
         id: this.id,
@@ -77,19 +80,6 @@ export default {
         fieldId: this.fieldId
       }
       this.$store.dispatch('modelStore/saveVisualToField', options)
-    }
-  },
-  mounted () {
-    this.visualValue = this.field.transform.values[this.id].mappedValue
-  },
-  watch: {
-    selectedVisualValue () {
-      this.$store.dispatch('modelStore/resetVisualsOfFiels', this.fieldId)
-      if (this.isMultipleValue) {
-        this.visualValue = ''
-      } else {
-        this.visualValue = this.selectedVisualValue
-      }
     }
   }
 }

@@ -3,19 +3,17 @@ import { Model, Field, FieldValue, Visual, Transform } from '../data/interfaces'
 export default {
   namespaced: true,
   state: {
-    model: {
-      id: '',
-      name: '',
-      fields: [],
-      shape: null,
-      fill: '',
-      stroke: ''
-    }
+    id: '',
+    name: '',
+    fields: [],
+    shape: 'rect',
+    fill: '',
+    stroke: ''
   },
   getters: {
     getFieldById (state) {
       return (id) => {
-        return state.model.fields.find(field => field.id === id)
+        return state.fields.find(field => field.id === id)
       }
     },
     getFieldValueById () {
@@ -24,73 +22,89 @@ export default {
       }
     },
     getAllFields (state) {
-      return state.model.fields
+      return state.fields
     }
   },
   mutations: {
     setModel (state, model) {
-      state.model = model
+      Object.assign(state, model)
     },
-    setFieldToModel (state, field) {
-      state.model.fields.push(field)
+    addField (state, field) {
+      state.fields = state.fields.concat(field)
+    },
+    removeField (state, fieldId) {
+      state.fields = state.fields.filter(stateField => fieldId !== stateField.id)
+    },
+    updateField (state, { oldField, newField }) {
+      Object.assign(oldField, newField)
+    },
+    addFieldValue (state, { field, value }) {
+      field.fieldValues = field.fieldValues.concat(value)
+    },
+    removeFieldValue (state, { field, valueId }) {
+      field.fieldValues = field.fieldValues.filter(stateFieldValue => stateFieldValue.id !== valueId)
+    },
+    updateFieldValue (state, { field, value }) {
+      field.fieldValues = field.fieldValues.map(stateFieldValue => {
+        if (stateFieldValue.id === value.id) {
+          return Object.assign(stateFieldValue, value)
+        } else {
+          return stateFieldValue
+        }
+      })
     },
     setName (state, name) {
-      state.model.name = name
+      state.name = name
     },
     setShape (state, shape) {
-      state.model.shape = shape
+      state.shape = shape
     },
     setFill (state, fill) {
-      state.model.fill = fill
+      state.fill = fill
     },
     setStroke (state, stroke) {
-      state.model.stroke = stroke
+      state.stroke = stroke
     }
   },
   actions: {
-    addValueToField ({ getters }, fieldId) {
-      const fieldValue = new FieldValue()
+    addValueToField ({ getters, dispatch, commit }, fieldId) {
       const field = getters.getFieldById(fieldId)
-      field.fieldValues.push(fieldValue)
+      commit('addFieldValue', { field, value: new FieldValue() })
     },
-    saveValueToField ({ state, getters }, { name, valueId, fieldId }) {
-      const field = getters.getFieldById(fieldId)
-      const value = getters.getFieldValueById(valueId, field)
-      value.name = name
-      window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
+    updateValueOfField ({ commit }, { field, value }) {
+      commit('updateFieldValue', { field, value })
     },
     deleteValueOfField ({ state, getters, dispatch }, { valueId, fieldId }) {
       const field = getters.getFieldById(fieldId)
       const value = getters.getFieldValueById(valueId, field)
       const index = field.fieldValues.indexOf(value)
       field.fieldValues.splice(index, 1)
-
-      dispatch('updateModelData')
     },
     resetVisualsOfFiels ({ getters, dispatch }, fieldId) {
       const field = getters.getFieldById(fieldId)
       field.transform = new Transform()
-      dispatch('updateModelData')
     },
     saveVisualToField ({ getters, dispatch }, { type, mappedValue = '', valueId = '', fieldId }) {
       const field = getters.getFieldById(fieldId)
       field.transform.values[valueId] = new Visual(type, mappedValue)
-      dispatch('updateModelData')
     },
-    addFieldToModel ({ commit, dispatch }) {
-      const field = new Field()
-      commit('setFieldToModel', field)
-      dispatch('updateModelData')
+    addFieldToModel ({ commit }) {
+      commit('addField', new Field())
     },
     saveFieldToModel ({ getters, dispatch }, { name, shape, fieldId }) {
+      // we shouldn't use this action
+
+      console.log('saveFieldToModel')
       const field = getters.getFieldById(fieldId)
       field.name = name
       field.shape = shape
-      dispatch('updateModelData')
     },
-    deleteField ({ state, getters, dispatch }, { fieldId }) {
-      state.model.fields = state.model.fields.filter(field => field.id !== fieldId)
-      dispatch('updateModelData')
+    deleteField ({ commit, dispatch }, { fieldId }) {
+      commit('removeField', fieldId)
+    },
+    updateField ({ getters, commit }, newField) {
+      const oldField = getters.getFieldById(newField.id)
+      commit('updateField', { oldField, newField })
     },
     refreshModel ({ commit }, id) {
       const modelStr = window.localStorage.getItem(id)
@@ -99,9 +113,12 @@ export default {
         commit('setModel', model)
       }
     },
-    updateModelData ({ state, dispatch }) {
-      dispatch('appStore/updateModel', state.model, { root: true })
-      window.localStorage.setItem(state.model.id, JSON.stringify(state.model))
+    updateModelData ({ state, dispatch }, payload) {
+      Object.assign(state, payload)
+    },
+    save ({ state, dispatch }) {
+      dispatch('appStore/updateModel', state, { root: true })
+      window.localStorage.setItem(state.id, JSON.stringify(state))
     }
   }
 }

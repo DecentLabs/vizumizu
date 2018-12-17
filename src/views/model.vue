@@ -21,7 +21,7 @@ export default {
       return this.$route.params.id
     },
     model () {
-      return this.$store.state.modelStore.model
+      return this.$store.state.modelStore
     }
   },
   created () {

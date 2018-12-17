@@ -1,37 +1,37 @@
 <template>
   <main>
     <div class="button-wrapper">
-      <router-link :to="{name: 'ModelData', params: {id: model.id}}"
+      <router-link :to="{name: 'ModelData', params: {id}}"
                    class="button show">
         see model data
       </router-link>
-      <button @click="sendModelForm" class="save-button">save model</button>
+      <button @click="save" class="save-button">save model</button>
       <button @click="addField" class="add-button">add new field</button>
-      <router-link :to="{name: 'ShapeEditor', params: {id: model.id}}"
+      <router-link :to="{name: 'ShapeEditor', params: {id}}"
                    class="button shape">
         edit layout
       </router-link>
     </div>
     <div class="model-details">
       <label>model name</label>
-      <input type="text" placeholder="add model name" v-model="model.name" class="title">
+      <input type="text" placeholder="add model name" v-model="name" class="title">
       <div class="basic-visuals">
         <div>
           <label>basic shape</label>
-          <shape-select :options="shapes" defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="model.shape"></shape-select>
+          <shape-select :options="shapes" defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="shape"></shape-select>
         </div>
         <div>
           <label>basic fill</label>
-          <input type="text" v-model="model.fill">
+          <input type="text" v-model="fill">
         </div>
         <div>
           <label>basic stroke</label>
-          <input type="text" v-model="model.stroke">
+          <input type="text" v-model="stroke">
         </div>
       </div>
     </div>
-    <div :key="field.id" v-for="field in model.fields">
-      <field-input :id="field.id"/>
+    <div :key="field.id" v-for="field in fields">
+      <field-input :id="field.id" :field="field"/>
     </div>
   </main>
 </template>
@@ -46,30 +46,50 @@ export default {
   name: 'createModel',
   data () {
     return {
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      shapes: visualTypes.find(i => i.type === 'Shape').mappedValue
     }
   },
   computed: {
-    model () {
-      return this.$store.state.modelStore.model
+    name: {
+      get () {
+        return this.$store.state.modelStore.name
+      },
+      set (value) {
+        this.$store.commit('modelStore/setName', value)
+      }
     },
-    shapes () {
-      const shapes = visualTypes.filter(i => {
-        return i.type === 'Shape'
-      }).pop()
-      return shapes.mappedValue
+    shape: {
+      get () {
+        return this.$store.state.modelStore.shape
+      }
+    },
+    fill: {
+      get () {
+        return this.$store.state.modelStore.fill
+      },
+      set (value) {
+        this.$store.commit('modelStore/setFill', value)
+      }
+    },
+    stroke: {
+      get () {
+        return this.$store.state.modelStore.stroke
+      },
+      set (value) {
+        this.$store.commit('modelStore/setStroke', value)
+      }
+    },
+    fields () {
+      return this.$store.state.modelStore.fields
     }
   },
   methods: {
     onShapeChange (value) {
-      this.model.shape = value
+      this.$store.commit('modelStore/setShape', value)
     },
-    sendModelForm () {
-      this.$store.commit('modelStore/setName', this.model.name)
-      this.$store.commit('modelStore/setFill', this.model.fill)
-      this.$store.commit('modelStore/setStroke', this.model.stroke)
-      this.$store.commit('modelStore/setShape', this.model.shape)
-      this.$store.dispatch('modelStore/updateModelData')
+    save () {
+      this.$store.dispatch('modelStore/save')
     },
     addField () {
       this.$store.dispatch('modelStore/addFieldToModel')
