@@ -19,7 +19,7 @@
     </div>
     <div class="field-values">
       <div :key="val.id" v-for="val in field.fieldValues">
-        <field-value :value="val" :field="field"/>
+        <field-value :fieldValue="val" :field="field"/>
       </div>
     </div>
     <div class="button-row">

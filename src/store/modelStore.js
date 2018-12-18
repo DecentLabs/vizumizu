@@ -8,7 +8,8 @@ export default {
     fields: [],
     shape: 'rect',
     fill: '',
-    stroke: ''
+    stroke: '',
+    error: false
   },
   getters: {
     getFieldById (state) {
@@ -18,6 +19,8 @@ export default {
     },
     getFieldValueById () {
       return (valueId, field) => {
+        console.log(field, 'gfbi')
+
         return field.fieldValues.find(value => value.id === valueId)
       }
     },
@@ -101,7 +104,6 @@ export default {
     saveFieldToModel ({ getters, dispatch }, { name, shape, fieldId }) {
       // we shouldn't use this action
 
-      console.log('saveFieldToModel')
       const field = getters.getFieldById(fieldId)
       field.name = name
       field.shape = shape
@@ -124,6 +126,10 @@ export default {
       Object.assign(state, payload)
     },
     save ({ state, dispatch }) {
+      if (state.name === '' || state.fill === '' || state.stroke === '' || state.shape === '') {
+        state.error = true
+        return
+      }
       dispatch('appStore/updateModel', state, { root: true })
       window.localStorage.setItem(state.id, JSON.stringify(state))
     }

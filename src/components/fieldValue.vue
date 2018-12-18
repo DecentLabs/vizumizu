@@ -2,7 +2,7 @@
   <div class="value-row">
     <div>
       <label :for="id">Value name</label>
-      <input :id="id" type="text" v-model="name">
+      <input :id="id" type="text" v-model="value">
       <button @click="deleteValue">X</button>
     </div>
 
@@ -27,34 +27,30 @@ import { visualTypes } from '../data/interfaces.js'
 
 export default {
   name: 'fieldValue',
-  props: ['field', 'value'],
+  props: ['field', 'fieldValue'],
   data () {
     return {}
   },
   computed: {
     id () {
-      return this.value.id
+      return this.fieldValue.id
     },
-    name: {
+    value: {
       get () {
-        return this.value.name
+
+        return this.fieldValue.value
       },
       set (newName) {
         this.$store.dispatch('modelStore/updateValueOfField',
-          { field: this.field, value: { id: this.value.id, name: newName } })
+          { field: this.field, value: { id: this.fieldValue.id, value: newName } })
       }
     },
     visualValue: {
       get () {
-        return this.$store.getters['modelStore/getVisualById'](this.field, this.value.id) || this.selectedVisual.mappedValue
+        return this.$store.getters['modelStore/getVisualById'](this.field, this.fieldValue.id) || this.selectedVisual.mappedValue
       },
       set (value) {
-        const visual = {
-          type: this.selectedVisual.type,
-          mappedValue: value
-        }
-        this.$store.dispatch('modelStore/saveVisualToField',
-          { field: this.field, value: this.value, visual })
+        this.saveVisualValue(value)
       }
     },
     transform () {
@@ -78,18 +74,19 @@ export default {
     deleteValue () {
       const options = {
         id: this.id,
-        fieldId: this.fieldId
+        fieldId: this.field.id
       }
+
+      console.log(options, 'fv')
       this.$store.dispatch('modelStore/deleteValueOfField', options)
     },
-    saveVisualValue () {
-      const options = {
+    saveVisualValue (value) {
+      const visual = {
         type: this.selectedVisual.type,
-        mappedValue: this.visualValue,
-        valueId: this.id,
-        fieldId: this.fieldId
+        mappedValue: value
       }
-      this.$store.dispatch('modelStore/saveVisualToField', options)
+      this.$store.dispatch('modelStore/saveVisualToField',
+        { field: this.field, value: this.fieldValue, visual })
     }
   }
 }

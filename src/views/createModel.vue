@@ -14,19 +14,21 @@
     </div>
     <div class="model-details">
       <label>model name</label>
-      <input type="text" placeholder="add model name" v-model="name" class="title">
+      <input type="text" placeholder="add model name" v-model="name" class="title" :class="{error: isError(name)}">
       <div class="basic-visuals">
         <div>
           <label>basic shape</label>
-          <shape-select defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="shape"></shape-select>
+          <shape-select defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="shape" ></shape-select>
         </div>
         <div>
           <label>basic fill</label>
-          <input type="text" v-model="fill">
+          <input type="text" placeholder="add fill color" v-model="fill" :class="{error: isError(fill)}">
+          <div class="colormarker" :style="{backgroundColor: fill}"></div>
         </div>
         <div>
           <label>basic stroke</label>
-          <input type="text" v-model="stroke">
+          <input type="text" placeholder="add stroke color" v-model="stroke" :class="{error: isError(stroke)}">
+          <div class="colormarker" :style="{borderColor: stroke}"></div>
         </div>
       </div>
     </div>
@@ -85,6 +87,9 @@ export default {
     }
   },
   methods: {
+    isError (val) {
+      return !val && this.$store.state.modelStore.error
+    },
     onShapeChange (value) {
       this.$store.commit('modelStore/setShape', value)
     },
@@ -97,7 +102,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
-    console.log('mounted')
   },
   components: {
     fieldInput,
@@ -150,9 +154,16 @@ export default {
     background: none;
   }
 
+  input.error,
+  select.error {
+    border-color: #ff6232;
+  }
+
   .colormarker {
+    display: inline-block;
     width: 20px;
     height: 20px;
+    border: 2px solid transparent;
   }
 
   .shape {
