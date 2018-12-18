@@ -8,11 +8,11 @@
 
     <div v-if="isMultipleValue">
       <label>visual value</label>
-      <!--<select v-model="visualValue">-->
-        <!--<option :key="index" v-for="(visual, index) in selectedVisualValue"-->
-                <!--:value="visual">{{visual}}-->
-        <!--</option>-->
-      <!--</select>-->
+      <select v-model="visualValue">
+        <option :key="index" v-for="(visual, index) in selectedVisualValue"
+                :value="visual">{{visual}}
+        </option>
+      </select>
     </div>
     <div v-else>
       <label>visual value</label>
