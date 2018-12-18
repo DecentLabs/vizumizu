@@ -2,13 +2,13 @@
   <div class="value-row">
     <div>
       <label :for="id">Value name</label>
-      <input :id="id" type="text" v-model="value">
+      <input :id="id" type="text" v-model="value" :class="{error: isError(value)}">
       <button @click="deleteValue">X</button>
     </div>
 
     <div v-if="isMultipleValue">
       <label>visual value</label>
-      <select v-model="visualValue">
+      <select v-model="visualValue" :class="{error: isError(visualValue)}">
         <option :key="index" v-for="(visual, index) in selectedVisualValue"
                 :value="visual">{{visual}}
         </option>
@@ -16,7 +16,7 @@
     </div>
     <div v-else>
       <label>visual value</label>
-      <input type="text" v-model="visualValue">
+      <input type="text" v-model="visualValue" :class="{error: isError(visualValue)}">
     </div>
     <div v-if="isColor" class="colormarker" :style="{backgroundColor: visualValue}"></div>
   </div>
@@ -37,7 +37,6 @@ export default {
     },
     value: {
       get () {
-
         return this.fieldValue.value
       },
       set (newName) {
@@ -71,6 +70,9 @@ export default {
     }
   },
   methods: {
+    isError (val) {
+      return typeof val !== 'number' && !val
+    },
     deleteValue () {
       const options = {
         id: this.id,
@@ -108,17 +110,7 @@ export default {
     padding: 5px 10px;
   }
 
-  input {
-    border: none;
-    border-bottom: 1px solid #333;
-  }
-
   button {
     background-color: #020202;
-  }
-
-  .colormarker {
-    width: 20px;
-    height: 20px;
   }
 </style>
