@@ -5,13 +5,14 @@
       <input :id="id" type="text" v-model="name">
       <button @click="deleteValue">X</button>
     </div>
+
     <div v-if="isMultipleValue">
       <label>visual value</label>
-      <select v-model="visualValue">
-        <option :key="index" v-for="(visual, index) in selectedVisualValue"
-                :value="visual">{{visual}}
-        </option>
-      </select>
+      <!--<select v-model="visualValue">-->
+        <!--<option :key="index" v-for="(visual, index) in selectedVisualValue"-->
+                <!--:value="visual">{{visual}}-->
+        <!--</option>-->
+      <!--</select>-->
     </div>
     <div v-else>
       <label>visual value</label>
@@ -44,8 +45,17 @@ export default {
       }
     },
     visualValue: {
-      get () {},
-      set (value) {}
+      get () {
+        return this.$store.getters['modelStore/getVisualById'](this.field, this.value.id) || this.selectedVisual.mappedValue
+      },
+      set (value) {
+        const visual = {
+          type: this.selectedVisual.type,
+          mappedValue: value
+        }
+        this.$store.dispatch('modelStore/saveVisualToField',
+          { field: this.field, value: this.value, visual })
+      }
     },
     transform () {
       return this.field.transform

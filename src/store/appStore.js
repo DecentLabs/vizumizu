@@ -11,11 +11,6 @@ export default {
       return (id) => {
         return state.models.find(model => model.id === id)
       }
-    },
-    getModelsVisuals (state) {
-      return (model) => {
-        return model.transform
-      }
     }
   },
   mutations: {
@@ -42,7 +37,7 @@ export default {
     save ({ state }) {
       window.localStorage.setItem('models', JSON.stringify(state.models))
     },
-    initModel (context, model) {
+    initModel (model) {
       window.localStorage.setItem(model.id, JSON.stringify(model))
     },
     load ({ commit }) {
@@ -59,12 +54,12 @@ export default {
       dispatch('initModel', model)
       return new Promise(resolve => resolve(model), err => console.log(err))
     },
-    updateModel ({ state, commit, getters, dispatch }, model) {
+    updateModel ({ commit, dispatch }, model) {
       dispatch('load')
       commit('updateModel', model)
       dispatch('save')
     },
-    deleteModel ({ state, commit, getters, dispatch }, id) {
+    deleteModel ({ commit, dispatch }, id) {
       commit('removeModel', id)
       dispatch('save')
     }

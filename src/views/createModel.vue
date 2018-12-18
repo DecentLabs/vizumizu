@@ -97,6 +97,7 @@ export default {
   },
   mounted () {
     this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
+    console.log('mounted')
   },
   components: {
     fieldInput,

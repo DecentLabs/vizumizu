@@ -21,6 +21,11 @@ export default {
         return field.fieldValues.find(value => value.id === valueId)
       }
     },
+    getVisualById () {
+      return (field, valueId) => {
+        return field.transform.values[valueId] && field.transform.values[valueId].mappedValue
+      }
+    },
     getAllFields (state) {
       return state.fields
     }
@@ -53,6 +58,9 @@ export default {
         }
       })
     },
+    setVisualToValue (state, {field, value, visual}) {
+      field.transform.values[value.id] = Visual.load(visual)
+    },
     setName (state, name) {
       state.name = name
     },
@@ -74,19 +82,18 @@ export default {
     updateValueOfField ({ commit }, { field, value }) {
       commit('updateFieldValue', { field, value })
     },
-    deleteValueOfField ({ state, getters, dispatch }, { valueId, fieldId }) {
+    deleteValueOfField ({ getters }, { valueId, fieldId }) {
       const field = getters.getFieldById(fieldId)
       const value = getters.getFieldValueById(valueId, field)
       const index = field.fieldValues.indexOf(value)
       field.fieldValues.splice(index, 1)
     },
-    resetVisualsOfFiels ({ getters, dispatch }, fieldId) {
+    resetVisualsOfFiels ({ getters }, fieldId) {
       const field = getters.getFieldById(fieldId)
       field.transform = new Transform()
     },
-    saveVisualToField ({ getters, dispatch }, { type, mappedValue = '', valueId = '', fieldId }) {
-      const field = getters.getFieldById(fieldId)
-      field.transform.values[valueId] = new Visual(type, mappedValue)
+    saveVisualToField ({ getters, commit }, { field, value, visual }) {
+      commit('setVisualToValue', {field, value, visual})
     },
     addFieldToModel ({ commit }) {
       commit('addField', new Field())
@@ -106,14 +113,14 @@ export default {
       const oldField = getters.getFieldById(newField.id)
       commit('updateField', { oldField, newField })
     },
-    refreshModel ({ commit }, id) {
+    refreshModel ({ state, commit }, id) {
       const modelStr = window.localStorage.getItem(id)
       if (modelStr) {
         const model = Model.load(JSON.parse(modelStr))
         commit('setModel', model)
       }
     },
-    updateModelData ({ state, dispatch }, payload) {
+    updateModelData ({ state }, payload) {
       Object.assign(state, payload)
     },
     save ({ state, dispatch }) {
