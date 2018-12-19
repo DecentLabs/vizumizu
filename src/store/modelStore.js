@@ -19,8 +19,6 @@ export default {
     },
     getFieldValueById () {
       return (valueId, field) => {
-        console.log(field, 'gfbi')
-
         return field.fieldValues.find(value => value.id === valueId)
       }
     },
@@ -84,7 +82,6 @@ export default {
       state.name = name
     },
     setShape (state, shape) {
-      console.log(shape, 'store shape')
       state.shape = shape
     },
     setFill (state, fill) {

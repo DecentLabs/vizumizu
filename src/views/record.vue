@@ -11,6 +11,7 @@
         <select v-model="selectedModelId">
           <option :key="index" v-for="(model, index) in models"
                   :value="model.id">{{model.name}}</option>
+          <option selected value="null">choose one</option>
         </select>
       </div>
       <div v-if="selectedModel">
@@ -29,6 +30,8 @@
 </template>
 
 <script>
+import { Model } from '../data/interfaces'
+
 export default {
   name: 'Record',
   data () {
@@ -43,7 +46,8 @@ export default {
       return this.$route.params.id
     },
     selectedModel () {
-      return this.$store.getters['appStore/getModelById'](this.selectedModelId)
+      const modelStr = window.localStorage.getItem(this.selectedModelId)
+      return Model.load(JSON.parse(modelStr))
     },
     models () {
       return this.$store.state.appStore.models
@@ -76,6 +80,7 @@ export default {
   },
   watch: {
     selectedModel () {
+      console.log(this.selectedModel)
       this.selectedModelsFields = this.selectedModel.fields.map(field => (
         {
           data: field,

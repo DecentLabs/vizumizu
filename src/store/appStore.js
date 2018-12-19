@@ -37,7 +37,7 @@ export default {
     save ({ state }) {
       window.localStorage.setItem('models', JSON.stringify(state.models))
     },
-    initModel (model) {
+    initModel (context, model) {
       window.localStorage.setItem(model.id, JSON.stringify(model))
     },
     load ({ commit }) {
