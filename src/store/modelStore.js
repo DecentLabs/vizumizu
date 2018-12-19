@@ -36,6 +36,17 @@ export default {
       return (field) => {
         return field.shape === 'null' ? state.shape : field.shape
       }
+    },
+    getFieldsToDraw (state) {
+      return state.fields.reduce((acc, curr) => {
+        const hasShape = acc.find(item => item.shape === curr.shape)
+
+        if (!hasShape) {
+          acc.push(curr)
+        }
+
+        return acc
+      }, [])
     }
   },
   mutations: {
@@ -73,6 +84,7 @@ export default {
       state.name = name
     },
     setShape (state, shape) {
+      console.log(shape, 'store shape')
       state.shape = shape
     },
     setFill (state, fill) {

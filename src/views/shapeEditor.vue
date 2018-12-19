@@ -77,7 +77,7 @@ export default {
   mounted () {
     this.setupDrag()
     this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
-    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFields, this.$store.getters['modelStore/getAllFields'])
+    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFields, this.$store.getters['modelStore/getFieldsToDraw'])
   }
 }
 </script>
