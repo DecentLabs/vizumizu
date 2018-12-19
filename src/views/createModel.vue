@@ -91,6 +91,7 @@ export default {
       return !val && this.$store.state.modelStore.error
     },
     onShapeChange (value) {
+      console.log(value)
       this.$store.commit('modelStore/setShape', value)
     },
     save () {

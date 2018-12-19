@@ -65,8 +65,9 @@ export default {
     }
   },
   actions: {
-    [LAYOUT_ACTIONS.loadFields] ({ commit, state }, fieldList) {
+    [LAYOUT_ACTIONS.loadFields] ({ commit, rootGetters }, fieldList) {
       fieldList.forEach(field => {
+        field.shape = rootGetters['modelStore/getFieldShape'](field)
         commit(LAYOUT_MUTATIONS.addField, field)
       })
     },

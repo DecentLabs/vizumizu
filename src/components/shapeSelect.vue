@@ -14,7 +14,7 @@ export default {
   props: ['options', 'defaultOption', 'selectedItem'],
   computed: {
     isDefaultSelected () {
-      return this.selectedItem === null
+      return this.selectedItem === 'null'
     },
     shapes () {
       const shapes = visualTypes.filter(i => {
@@ -28,7 +28,7 @@ export default {
       this.$emit('onSelectChange', e.target.value)
     },
     isSelected (item) {
-      return item === this.selectedItem
+      return this.selectedItem === item
     }
   }
 }

@@ -31,6 +31,11 @@ export default {
     },
     getAllFields (state) {
       return state.fields
+    },
+    getFieldShape (state) {
+      return (field) => {
+        return field.shape === 'null' ? state.shape : field.shape
+      }
     }
   },
   mutations: {
