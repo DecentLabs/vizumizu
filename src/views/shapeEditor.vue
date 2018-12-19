@@ -1,7 +1,7 @@
 <template>
   <main>
-    <div
-      v-for="img in layout"
+    <div :key="i"
+      v-for="(img, i) in layout"
       v-bind:style="{
         top: img.top + 'px',
         left: img.left + 'px',
