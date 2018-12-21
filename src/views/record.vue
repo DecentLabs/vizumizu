@@ -19,7 +19,7 @@
           <label>select {{field.name}}</label>
           <select v-model="selectedModelsFields[i].value">
             <option :key="index" v-for="(value, index) in field.fieldValues"
-                    :value="value.id">{{value.name}}</option>
+                    :value="value.id">{{value.value}}</option>
           </select>
         </div>
       </div>

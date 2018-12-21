@@ -16,7 +16,7 @@ class Model extends ModelHead {
   constructor (id, name) {
     super(id, name)
     this.fields = []
-    this.shape = null
+    this.shape = 'null'
     this.stroke = 'rgba(18,118,193,1)'
     this.fill = 'rgba(186,75,62,1)'
     this.hasRecordName = false
@@ -37,7 +37,7 @@ class Field {
     this.id = uuid()
     this.name = name || 'untitled'
     this.fieldValues = []
-    this.shape = null
+    this.shape = 'null'
     this.transform = new Transform()
   }
 

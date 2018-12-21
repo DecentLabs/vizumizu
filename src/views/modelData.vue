@@ -10,7 +10,7 @@
         <h3>{{field.name}}</h3>
         <div class="legend-visuals">
           <div :key="i" v-for="(value, i) in field.fieldValues">
-            <p>{{value.name}}</p>
+            <p>{{value.value}}</p>
             <div class="visual-wrapper">
               <visual :set="getLegendVisual(field, value)"></visual>
             </div>
@@ -37,11 +37,12 @@ export default {
       return this.$store.getters['recordStore/getRecordsByModel'](this.id)
     },
     model () {
-      return this.$store.getters['appStore/getModelById'](this.id)
+      return this.$store.state.modelStore
     },
     visualsets () {
       return this.records.map(record => {
-        return record.map(item => this.mapVisual(item.fieldId, item.fieldValueId)).reduce((acc, curr) => {
+        return record.map(item => {
+          return this.mapVisual(item.fieldId, item.fieldValueId)}).reduce((acc, curr) => {
           Object.assign(acc, curr)
           return acc
         }, {})
@@ -55,9 +56,12 @@ export default {
     getLegendVisual (field, fieldValue) {
       const type = field.transform.values[fieldValue.id].type.toLowerCase()
       const value = field.transform.values[fieldValue.id].mappedValue
+      const shape = field.transform.type === 'Shape'
+        ? field.transform.values[fieldValue.id].mappedValue
+        : this.$store.getters['modelStore/getFieldShape'](field)
       return {
         [type]: value,
-        shape: field.shape
+        shape
       }
     },
     mapVisual (fieldId, fieldValue) {
@@ -66,8 +70,8 @@ export default {
       return {[transform.type.toLowerCase()]: transform.mappedValue}
     }
   },
-  created () {
-    this.$store.dispatch('appStore/setModelList')
+  mounted () {
+    this.$store.dispatch('modelStore/refreshModel', this.id)
     this.$store.dispatch('recordStore/setRecordList')
   },
   components: {
@@ -90,7 +94,9 @@ export default {
     display: flex;
     width: 70%;
     flex-flow: row wrap;
-    margin: 0 auto;
+    margin: 0 auto 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #666;
   }
 
   .legend .field {
