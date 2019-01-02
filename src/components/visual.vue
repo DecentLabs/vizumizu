@@ -44,7 +44,6 @@ export default {
     },
     style () {
       if (this.set && this.set.positions) {
-        console.log(this.set)
         return Object.assign(this.initStyle, this.set.positions)
       } else {
         return this.initStyle
@@ -59,11 +58,10 @@ export default {
     position: relative;
   }
 
-  .visual,
-  .visual svg {
+  .visual {
     width: 100%;
     height: 100%;
-    padding: 10%;
+    padding: 5%;
     box-sizing: border-box;
   }
 
@@ -72,8 +70,11 @@ export default {
     width: 50%;
     height: 50%;
   }
+</style>
 
-  svg {
-    width: 100px;
+<style>
+  .visual svg {
+    width: 100%;
+    height: 100%;
   }
 </style>

@@ -63,7 +63,13 @@ export default {
       this.layout.forEach(item => {
         if (item[0].prop === item[1].prop) {
           let match = item[0].prop
-          positions[match] = 0
+          if (match === 'hcenter') {
+            positions.left = '25%'
+          } else if (match === 'vcenter') {
+            positions.top = '25%'
+          } else {
+            positions[match] = '25%'
+          }
         } else {
           item.forEach(i => {
             if (i.fieldId === id) {
@@ -105,7 +111,7 @@ export default {
     reduceShapes (acc, curr) {
       let currKey = Object.keys(curr)[0]
       if (acc.hasOwnProperty(currKey)) {
-        Object.assign({}, curr[currKey])
+        Object.assign(acc[currKey], curr[currKey])
       } else {
         Object.assign(acc, curr)
       }
@@ -115,6 +121,7 @@ export default {
   mounted () {
     this.$store.dispatch('modelStore/refreshModel', this.id)
     this.$store.dispatch('recordStore/setRecordList')
+    console.log(this.visualsets)
   },
   components: {
     visual
