@@ -2,6 +2,7 @@ import wine3 from '../assets/svg/wine3.svg'
 import rectangle from '../assets/svg/rectangle.svg'
 import circle from '../assets/svg/circle.svg'
 import triangle from '../assets/svg/triangle.svg'
+import leaf from '../assets/svg/leaf.svg'
 
 const images = [
   {
@@ -27,6 +28,12 @@ const images = [
     width: 100,
     height: 102,
     src: triangle
+  },
+  {
+    name: 'leaf',
+    width: 100,
+    height: 102,
+    src: leaf
   }
 ]
 

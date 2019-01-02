@@ -11,6 +11,7 @@
                    class="button shape">
         edit layout
       </router-link>
+      <input class="button shape" type="file" @change="handleUpload">
     </div>
     <div class="model-details">
       <label>model name</label>
@@ -87,6 +88,19 @@ export default {
     }
   },
   methods: {
+    handleUpload (e) {
+      const file = e.target.files[0]
+      const ext = file.name.split('.')[file.name.split('.').length - 1]
+
+      if (ext === 'svg') {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const thisImage = reader.result
+          localStorage.setItem('imgData', thisImage)
+        }
+        reader.readAsDataURL(file)
+      }
+    },
     isError (val) {
       return !val && this.$store.state.modelStore.error
     },

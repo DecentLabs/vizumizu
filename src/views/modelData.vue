@@ -50,7 +50,10 @@ export default {
       return this.records
         .map(record => record.map(item => this.mapVisual(item.fieldId, item.fieldValueId))
           .reduce((acc, curr) => this.reduceShapes(acc, curr), {})
-        ).map(item => Object.values(item))
+        ).map(item => {
+          item = this.setDefaultStyles(item)
+          return Object.values(item)
+        })
     }
   },
   methods: {
@@ -107,6 +110,19 @@ export default {
           [transform.type.toLowerCase()]: transform.mappedValue
         }
       }
+    },
+    setDefaultStyles (shapes) {
+      for (let shape in shapes) {
+        if (shape === this.model.shape) {
+          if (!shapes[shape].hasOwnProperty('fillcolor')) {
+            shapes[shape].fillcolor = this.model.fill
+          }
+          if (!shapes[shape].hasOwnProperty('strokecolor')) {
+            shapes[shape].strokecolor = this.model.stroke
+          }
+        }
+      }
+      return shapes
     },
     reduceShapes (acc, curr) {
       let currKey = Object.keys(curr)[0]
