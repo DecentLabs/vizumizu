@@ -75,7 +75,7 @@ export default {
     saveRecordAndFinish (e) {
       e.preventDefault()
       this.saveRecord()
-      this.$router.go('/')
+      this.$router.replace('/')
     }
   },
   watch: {

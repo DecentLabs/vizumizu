@@ -19,8 +19,8 @@
       </div>
     </div>
     <div class="visual-grid">
-      <div class="visual-wrapper">
-        <visual :key="index" v-for="(set, index) in visualsets" :set="set" final="final"></visual>
+      <div class="visual-wrapper" :key="index" v-for="(setItem, index) in visualsets">
+        <visual :key="key" v-for="(set, key) in setItem" :set="set" final="final"></visual>
       </div>
     </div>
   </main>
@@ -47,18 +47,10 @@ export default {
       return this.$store.state.modelStore
     },
     visualsets () {
-      const shapeSets = this.records.map(record => {
-        return record.map(item => this.mapVisual(item.fieldId, item.fieldValueId)).reduce((acc, curr) => {
-          let currKey = Object.keys(curr)[0]
-          if (acc.hasOwnProperty(currKey)) {
-            Object.assign({}, curr[currKey])
-          } else {
-            Object.assign(acc, curr)
-          }
-          return acc
-        }, {})
-      })
-      return Object.values(shapeSets[0])
+      return this.records
+        .map(record => record.map(item => this.mapVisual(item.fieldId, item.fieldValueId))
+          .reduce((acc, curr) => this.reduceShapes(acc, curr), {})
+        ).map(item => Object.values(item))
     }
   },
   methods: {
@@ -109,6 +101,15 @@ export default {
           [transform.type.toLowerCase()]: transform.mappedValue
         }
       }
+    },
+    reduceShapes (acc, curr) {
+      let currKey = Object.keys(curr)[0]
+      if (acc.hasOwnProperty(currKey)) {
+        Object.assign({}, curr[currKey])
+      } else {
+        Object.assign(acc, curr)
+      }
+      return acc
     }
   },
   mounted () {
