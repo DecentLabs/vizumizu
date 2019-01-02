@@ -1,5 +1,6 @@
 <template>
-  <div v-once v-html="img.src" :style="style" class="visual"></div>
+  <div v-once v-html="img.src" :style="style" class="visual" :class="final">
+  </div>
 </template>
 
 <script>
@@ -7,7 +8,7 @@ import { findByName } from '../data/images.js'
 
 export default {
   name: 'visual',
-  props: ['set', 'image'],
+  props: ['set', 'image', 'final'],
   data () {
     return {
       shape: (this.set && this.set.shape) || 'circle',
@@ -30,7 +31,7 @@ export default {
         return ''
       }
     },
-    style () {
+    initStyle () {
       const scale = parseInt(this.size, 10) / 100
 
       return {
@@ -40,18 +41,36 @@ export default {
         opacity: this.opacity,
         transform: `scale(${scale}) rotate(${this.rotation}deg)`
       }
+    },
+    style () {
+      if (this.set && this.set.positions) {
+        console.log(this.set)
+        return Object.assign(this.initStyle, this.set.positions)
+      } else {
+        return this.initStyle
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+  .visual {
+    position: relative;
+  }
+
   .visual,
   .visual svg {
     width: 100%;
     height: 100%;
     padding: 10%;
     box-sizing: border-box;
+  }
+
+  .visual.final {
+    position: absolute;
+    width: 50%;
+    height: 50%;
   }
 
   svg {

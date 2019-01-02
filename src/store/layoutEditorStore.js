@@ -13,13 +13,15 @@ const LAYOUT_ACTIONS = {
 }
 
 const LAYOUT_MUTATIONS = {
+  setModelId: 'setModelId',
   addField: 'addField',
   updateFieldFile: 'updateFieldFile',
   selectField: 'selectField',
   updateImage: 'updateImage',
   updatePosition: 'updatePosition',
   resetLayoutStore: 'resetLayoutStore',
-  updateSolver: 'updateSolver'
+  updateSolver: 'updateSolver',
+  updateLayout: 'updateLayout'
 }
 
 const createConstrainKey = constrainTuple =>
@@ -30,11 +32,19 @@ const createConstrainKey = constrainTuple =>
 export default {
   namespaced: true,
   state: {
+    modelId: '',
     fields: [],
     solver: new Solver(),
-    constrains: new Map()
+    constrains: new Map(),
+    layout: []
   },
   mutations: {
+    [LAYOUT_MUTATIONS.updateLayout] (state, tuple) {
+      state.layout = tuple
+    },
+    [LAYOUT_MUTATIONS.setModelId] (state, id) {
+      state.modelId = id
+    },
     [LAYOUT_MUTATIONS.updateSolver] (state) {
       state.solver.updateVariables()
     },
@@ -94,6 +104,7 @@ export default {
     [LAYOUT_ACTIONS.setFieldConstrain] ({ state, getters, commit }, nearby) {
       const solver = state.solver
       const constrains = state.constrains
+      let tuples = []
       console.log('nearby', nearby)
       nearby.forEach(constrainTuple => {
         const [p1, p2] = constrainTuple
@@ -101,7 +112,7 @@ export default {
         const field2 = getters.getFieldById(p2.fieldId)
 
         console.log('new constrain: ', createConstrainKey(constrainTuple))
-
+        tuples.push(constrainTuple)
         const constrain = new Constraint(
           new Expression(
             [-1, field1.layoutItem[p1.prop]],
@@ -117,6 +128,8 @@ export default {
       })
 
       commit(LAYOUT_MUTATIONS.updateSolver)
+      commit(LAYOUT_MUTATIONS.updateLayout, tuples)
+      localStorage.setItem(`layout-${state.modelId}`, JSON.stringify(tuples))
     }
   },
   getters

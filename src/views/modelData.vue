@@ -19,7 +19,9 @@
       </div>
     </div>
     <div class="visual-grid">
-      <visual :key="index" v-for="(set, index) in visualsets" :set="set"></visual>
+      <div class="visual-wrapper">
+        <visual :key="index" v-for="(set, index) in visualsets" :set="set" final="final"></visual>
+      </div>
     </div>
   </main>
 </template>
@@ -33,6 +35,11 @@ export default {
     id () {
       return this.$route.params.id
     },
+    layout () {
+      return this.$store.state.layoutStore.layout.length > 0
+        ? this.$store.state.layoutStore.layout
+        : JSON.parse(localStorage.getItem(`layout-${this.id}`))
+    },
     records () {
       return this.$store.getters['recordStore/getRecordsByModel'](this.id)
     },
@@ -40,25 +47,50 @@ export default {
       return this.$store.state.modelStore
     },
     visualsets () {
-      return this.records.map(record => {
-        return record.map(item => {
-          return this.mapVisual(item.fieldId, item.fieldValueId)}).reduce((acc, curr) => {
-          Object.assign(acc, curr)
+      const shapeSets = this.records.map(record => {
+        return record.map(item => this.mapVisual(item.fieldId, item.fieldValueId)).reduce((acc, curr) => {
+          let currKey = Object.keys(curr)[0]
+          if (acc.hasOwnProperty(currKey)) {
+            Object.assign({}, curr[currKey])
+          } else {
+            Object.assign(acc, curr)
+          }
           return acc
         }, {})
       })
+      return Object.values(shapeSets[0])
     }
   },
   methods: {
     getFieldById (id) {
       return this.model.fields.find(field => field.id === id)
     },
+    getPositionById (id) {
+      let positions = {}
+
+      this.layout.forEach(item => {
+        if (item[0].prop === item[1].prop) {
+          let match = item[0].prop
+          positions[match] = 0
+        } else {
+          item.forEach(i => {
+            if (i.fieldId === id) {
+              positions[i.prop] = '50%'
+            }
+          })
+        }
+      })
+      return positions
+    },
+    getShape (field, fieldValue) {
+      return field.transform.type === 'Shape'
+        ? field.transform.values[fieldValue.id].mappedValue
+        : this.$store.getters['modelStore/getFieldShape'](field)
+    },
     getLegendVisual (field, fieldValue) {
       const type = field.transform.values[fieldValue.id].type.toLowerCase()
       const value = field.transform.values[fieldValue.id].mappedValue
-      const shape = field.transform.type === 'Shape'
-        ? field.transform.values[fieldValue.id].mappedValue
-        : this.$store.getters['modelStore/getFieldShape'](field)
+      const shape = this.getShape(field, fieldValue)
       return {
         [type]: value,
         shape
@@ -67,7 +99,16 @@ export default {
     mapVisual (fieldId, fieldValue) {
       const field = this.getFieldById(fieldId)
       const transform = field.transform.values[fieldValue]
-      return {[transform.type.toLowerCase()]: transform.mappedValue}
+      const shape = this.getShape(field, fieldValue)
+      const positions = this.getPositionById(fieldId)
+
+      return {
+        [shape]: {
+          shape,
+          positions,
+          [transform.type.toLowerCase()]: transform.mappedValue
+        }
+      }
     }
   },
   mounted () {
@@ -119,5 +160,9 @@ export default {
     width: 60px;
     height: 60px;
     margin: 0 auto;
+  }
+
+  .visual-grid .visual-wrapper {
+    position: relative;
   }
 </style>

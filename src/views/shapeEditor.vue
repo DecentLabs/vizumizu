@@ -23,7 +23,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Draggable } from '@shopify/draggable'
-import { LAYOUT_ACTIONS } from '../store/layoutEditorStore.js'
+import { LAYOUT_ACTIONS, LAYOUT_MUTATIONS } from '../store/layoutEditorStore.js'
 import visual from '../components/visual.vue'
 
 export default {
@@ -76,6 +76,7 @@ export default {
   },
   mounted () {
     this.setupDrag()
+    this.$store.commit('layoutStore/' + LAYOUT_MUTATIONS.setModelId, this.$route.params.id)
     this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
     this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFields, this.$store.getters['modelStore/getFieldsToDraw'])
   }
