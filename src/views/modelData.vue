@@ -28,16 +28,12 @@
 
 <script>
 import visual from '@/components/visual'
-import { LAYOUT_ACTIONS } from '../store/layoutEditorStore.js'
 
 export default {
   name: 'ModelData',
   computed: {
     id () {
       return this.$route.params.id
-    },
-    layout () {
-      return this.$store.getters['layoutStore/getLayout'](this.id)
     },
     records () {
       return this.$store.getters['recordStore/getRecordsByModel'](this.id)
@@ -53,34 +49,17 @@ export default {
           item = this.setDefaultStyles(item)
           return Object.values(item)
         })
+    },
+    layout () {
+      return this.$store.getters['layoutStore/relativeLayout'].reduce((acc, curr) => {
+        acc[curr.id] = curr
+        return acc
+      }, {})
     }
   },
   methods: {
     getFieldById (id) {
       return this.model.fields.find(field => field.id === id)
-    },
-    getPositionById (id) {
-      let positions = {}
-
-      this.layout.forEach(item => {
-        if (item[0].prop === item[1].prop) {
-          let match = item[0].prop
-          if (match === 'hcenter') {
-            positions.left = '25%'
-          } else if (match === 'vcenter') {
-            positions.top = '25%'
-          } else {
-            positions[match] = '25%'
-          }
-        } else {
-          item.forEach(i => {
-            if (i.fieldId === id) {
-              positions[i.prop] = '50%'
-            }
-          })
-        }
-      })
-      return positions
     },
     getShape (field, fieldValue) {
       return field.transform.type === 'Shape'
@@ -100,15 +79,23 @@ export default {
       const field = this.getFieldById(fieldId)
       const transform = field.transform.values[fieldValue]
       const shape = this.getShape(field, fieldValue)
-//      const positions = this.getPositionById(fieldId)
-
       return {
         [shape]: {
+          fieldId,
+          position: this.layout[fieldId],
           shape,
-//          positions,
           [transform.type.toLowerCase()]: transform.mappedValue
         }
       }
+    },
+    reduceShapes (acc, curr) {
+      let currKey = Object.keys(curr)[0]
+      if (acc.hasOwnProperty(currKey)) {
+        Object.assign(acc[currKey], curr[currKey])
+      } else {
+        Object.assign(acc, curr)
+      }
+      return acc
     },
     setDefaultStyles (shapes) {
       for (let shape in shapes) {
@@ -122,24 +109,13 @@ export default {
         }
       }
       return shapes
-    },
-    reduceShapes (acc, curr) {
-      let currKey = Object.keys(curr)[0]
-      if (acc.hasOwnProperty(currKey)) {
-        Object.assign(acc[currKey], curr[currKey])
-      } else {
-        Object.assign(acc, curr)
-      }
-      return acc
     }
   },
   mounted () {
     this.$store.dispatch('modelStore/refreshModel', this.id)
     this.$store.dispatch('recordStore/setRecordList')
-    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFields, this.$store.getters['modelStore/getFieldsToDraw'])
-    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFieldConstrains, this.id)
+    this.$store.dispatch('layoutStore/reset', this.id)
     console.log(this.visualsets)
-    console.log('layout', this.layout)
   },
   components: {
     visual

@@ -83,6 +83,15 @@ export default class LayoutItem {
     this.solver.suggestValue(this.top, y)
   }
 
+  setScale (scale) {
+    let [scaleX, scaleY] = scale.split(',')
+    if (!scaleY) {
+      scaleY = scaleX
+    }
+
+    this.setSize([this.width * scaleX, this.height * scaleY])
+  }
+
   setSize (size) {
     const [width, height] = size
     this.solver.suggestValue(this.width, width)
@@ -93,7 +102,7 @@ export default class LayoutItem {
     this.outerConstraints = constraints.map(constraintTuple => {
       // [ prop, { layoutItem, prop}]
       const myProp = constraintTuple[0]
-      const { layoutItem, prop } = constraintTuple[1]
+      const {layoutItem, prop} = constraintTuple[1]
       return new Constraint(
         new Expression([-1, this[myProp]], layoutItem[prop]),
         Operator.Eq,

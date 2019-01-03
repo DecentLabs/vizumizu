@@ -1,4 +1,4 @@
-import { layout } from './kiwi-layout.js'
+import { layout, relativeLayout } from './kiwi-layout.js'
 
 const fields = state => state.fields
 const selected = state => id =>
@@ -82,6 +82,7 @@ export default {
   fields,
   selected,
   layout,
+  relativeLayout,
   images,
   imageByName,
   getFieldById,

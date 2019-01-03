@@ -18,7 +18,9 @@ export default {
       stroketype: (this.set && this.set.stroketype) || 'solid',
       opacity: (this.set && this.set.opacity) || 1,
       rotation: (this.set && this.set.rotation) || 0,
-      size: (this.set && this.set.size) || 100
+      size: (this.set && this.set.size) || 100,
+      left: (this.set && this.set.position && this.set.position.left) || 0,
+      top: (this.set && this.set.position && this.set.position.top) || 0
     }
   },
   computed: {
@@ -39,15 +41,13 @@ export default {
         stroke: this.strokecolor,
         strokeWidth: this.strokesize,
         opacity: this.opacity,
-        transform: `scale(${scale}) rotate(${this.rotation}deg)`
+        transform: `scale(${scale}) rotate(${this.rotation}deg)`,
+        top: `${this.top}px`,
+        left: `${this.left}px`
       }
     },
     style () {
-      if (this.set && this.set.positions) {
-        return Object.assign(this.initStyle, this.set.positions)
-      } else {
-        return this.initStyle
-      }
+      return this.initStyle
     }
   }
 }

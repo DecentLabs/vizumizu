@@ -18,4 +18,19 @@ const layout = (state, getters) => {
   })
 }
 
-export { layout }
+const relativeLayout = (state, getters) => {
+  const layout = getters.layout
+
+  const reducer = find => (acc, curr) => (curr[find] < acc ? curr[find] : acc)
+
+  const minLeft = layout.reduce(reducer('left'), Infinity)
+  const minTop = layout.reduce(reducer('top'), Infinity)
+
+  return layout.map(item => {
+    item.top = item.top - minTop
+    item.left = item.left - minLeft
+    return item
+  })
+}
+
+export { layout, relativeLayout }

@@ -2,7 +2,7 @@
   <main>
     <div>
       <router-link class="button edit" :to="{name: 'editModel', params: {id}}">
-       model
+        model
       </router-link>
       <router-link :to="{name: 'ModelData', params: {id}}"
                    class="button show">
@@ -11,17 +11,17 @@
       <button class="button add">save</button>
     </div>
     <div :key="i"
-      v-for="(img, i) in layout"
-      v-bind:style="{
+         v-for="(img, i) in layout"
+         v-bind:style="{
         top: img.top + 'px',
         left: img.left + 'px',
         width: img.width + 'px',
         height: img.height + 'px'
       }"
-      :data-field-id="img.id"
-      :data-top="img.top"
-      :data-left="img.left"
-      class="draggable-source"
+         :data-field-id="img.id"
+         :data-top="img.top"
+         :data-left="img.left"
+         class="draggable-source"
     >
       <visual :image="img.image"></visual>
     </div>
@@ -33,7 +33,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Draggable } from '@shopify/draggable'
-import { LAYOUT_ACTIONS, LAYOUT_MUTATIONS } from '../store/layoutEditorStore.js'
+import { LAYOUT_ACTIONS } from '../store/layoutEditorStore.js'
 import visual from '../components/visual.vue'
 
 export default {
@@ -42,7 +42,7 @@ export default {
     visual
   },
   computed: {
-    ...mapGetters({ layout: 'layoutStore/layout' }),
+    ...mapGetters({layout: 'layoutStore/layout'}),
     model () {
       return this.$store.getters['appStore/getModelById'](this.id)
     },
@@ -74,7 +74,7 @@ export default {
           sensorEvent.clientX - offsetX,
           sensorEvent.clientY - offsetY
         ]
-        this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.setFieldPosition, { id, position })
+        this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.setFieldPosition, {id, position})
       })
       d.on('drag:stop', e => {
         nearby = this.$store.getters['layoutStore/getNearbyPoints'](field)
@@ -85,10 +85,11 @@ export default {
     }
   },
   mounted () {
+    const modelId = this.$route.params.id
+    this.$store.dispatch('modelStore/refreshModel', modelId)
+    this.$store.dispatch('layoutStore/reset', modelId)
+
     this.setupDrag()
-    this.$store.commit('layoutStore/' + LAYOUT_MUTATIONS.setModelId, this.$route.params.id)
-    this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
-    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFields, this.$store.getters['modelStore/getFieldsToDraw'])
   }
 }
 </script>
