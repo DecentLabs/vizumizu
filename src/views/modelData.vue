@@ -28,6 +28,7 @@
 
 <script>
 import visual from '@/components/visual'
+import { LAYOUT_ACTIONS } from '../store/layoutEditorStore.js'
 
 export default {
   name: 'ModelData',
@@ -36,9 +37,7 @@ export default {
       return this.$route.params.id
     },
     layout () {
-      return this.$store.state.layoutStore.layout.length > 0
-        ? this.$store.state.layoutStore.layout
-        : JSON.parse(localStorage.getItem(`layout-${this.id}`))
+      return this.$store.getters['layoutStore/getLayout'](this.id)
     },
     records () {
       return this.$store.getters['recordStore/getRecordsByModel'](this.id)
@@ -101,12 +100,12 @@ export default {
       const field = this.getFieldById(fieldId)
       const transform = field.transform.values[fieldValue]
       const shape = this.getShape(field, fieldValue)
-      const positions = this.getPositionById(fieldId)
+//      const positions = this.getPositionById(fieldId)
 
       return {
         [shape]: {
           shape,
-          positions,
+//          positions,
           [transform.type.toLowerCase()]: transform.mappedValue
         }
       }
@@ -137,7 +136,10 @@ export default {
   mounted () {
     this.$store.dispatch('modelStore/refreshModel', this.id)
     this.$store.dispatch('recordStore/setRecordList')
+    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFields, this.$store.getters['modelStore/getFieldsToDraw'])
+    this.$store.dispatch('layoutStore/' + LAYOUT_ACTIONS.loadFieldConstrains, this.id)
     console.log(this.visualsets)
+    console.log('layout', this.layout)
   },
   components: {
     visual

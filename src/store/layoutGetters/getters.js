@@ -8,6 +8,8 @@ const imageByName = state => name =>
   state.images.find(image => image.name === name)
 const getFieldById = state => id => state.fields.find(field => field.id === id)
 
+const getLayout = state => id => state.layout.length > 0 ? state.layout : JSON.parse(localStorage.getItem(`layout-${id}`))
+
 const getNearbyPoints = state => field => {
   const threshold = 10
   const fields = state.fields
@@ -83,5 +85,6 @@ export default {
   images,
   imageByName,
   getFieldById,
-  getNearbyPoints
+  getNearbyPoints,
+  getLayout
 }

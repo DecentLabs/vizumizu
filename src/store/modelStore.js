@@ -14,6 +14,7 @@ export default {
   getters: {
     getFieldById (state) {
       return (id) => {
+        console.log('getfieldId', id)
         return state.fields.find(field => field.id === id)
       }
     },
@@ -42,7 +43,6 @@ export default {
         if (!hasShape) {
           acc.push(curr)
         }
-
         return acc
       }, [])
     }

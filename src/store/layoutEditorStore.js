@@ -9,7 +9,8 @@ const LAYOUT_ACTIONS = {
   setFieldPosition: 'setFieldPosition',
   setFieldConstrain: 'setFieldConstrain',
   removeFieldConstrain: 'removeFieldConstrain',
-  loadFields: 'loadFields'
+  loadFields: 'loadFields',
+  loadFieldConstrains: 'loadFieldConstrains'
 }
 
 const LAYOUT_MUTATIONS = {
@@ -122,7 +123,6 @@ export default {
           0,
           Strength.strong
         )
-
         solver.addConstraint(constrain)
         constrains.set(constrainTuple, constrain)
       })
@@ -130,6 +130,32 @@ export default {
       commit(LAYOUT_MUTATIONS.updateSolver)
       commit(LAYOUT_MUTATIONS.updateLayout, tuples)
       localStorage.setItem(`layout-${state.modelId}`, JSON.stringify(tuples))
+    },
+    [LAYOUT_ACTIONS.loadFieldConstrains] ({ state, getters, commit }, modelId) {
+      const solver = state.solver
+      const constrains = state.constrains
+      const layouts = getters.getLayout(modelId)
+
+      layouts.forEach(constrainTuple => {
+        const [p1, p2] = constrainTuple
+        const field1 = getters.getFieldById(p1.fieldId)
+        const field2 = getters.getFieldById(p2.fieldId)
+
+        console.log('new constrain: ', createConstrainKey(constrainTuple))
+        const constrain = new Constraint(
+          new Expression(
+            [-1, field1.layoutItem[p1.prop]],
+            field2.layoutItem[p2.prop]
+          ),
+          Operator.Eq,
+          0,
+          Strength.strong
+        )
+        console.log(constrain, constrainTuple)
+        solver.addConstraint(constrain)
+        constrains.set(constrainTuple, constrain)
+      })
+      commit(LAYOUT_MUTATIONS.updateSolver)
     }
   },
   getters
