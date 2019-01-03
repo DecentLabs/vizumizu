@@ -1,5 +1,15 @@
 <template>
   <main>
+    <div>
+      <router-link class="button edit" :to="{name: 'editModel', params: {id}}">
+       model
+      </router-link>
+      <router-link :to="{name: 'ModelData', params: {id}}"
+                   class="button show">
+        visual
+      </router-link>
+      <button class="button add">save</button>
+    </div>
     <div :key="i"
       v-for="(img, i) in layout"
       v-bind:style="{

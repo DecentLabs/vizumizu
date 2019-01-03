@@ -3,9 +3,7 @@
     <div>
       <label :for="id">Value name</label>
       <input :id="id" type="text" v-model="value" :class="{error: isError(value)}">
-      <button @click="deleteValue">X</button>
     </div>
-
     <div v-if="isMultipleValue">
       <label>visual value</label>
       <select v-model="visualValue" :class="{error: isError(visualValue)}">
@@ -17,8 +15,9 @@
     <div v-else>
       <label>visual value</label>
       <input type="text" v-model="visualValue" :class="{error: isError(visualValue)}">
+      <div v-if="isColor" class="colormarker" :style="{backgroundColor: visualValue}"></div>
     </div>
-    <div v-if="isColor" class="colormarker" :style="{backgroundColor: visualValue}"></div>
+    <button @click="deleteValue" class="button delete"></button>
   </div>
 </template>
 
@@ -97,20 +96,18 @@ export default {
 <style scoped>
   .value-row {
     display: flex;
+    align-items: center;
     margin-bottom: 15px;
     text-align: left;
   }
 
   .value-row > div {
+    width: 50%;
     margin-right: 60px;
   }
 
   label, input {
     font-size: 18px;
     padding: 5px 10px;
-  }
-
-  button {
-    background-color: #020202;
   }
 </style>

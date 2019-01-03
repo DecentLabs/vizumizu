@@ -3,15 +3,16 @@
     <div class="button-wrapper">
       <router-link :to="{name: 'ModelData', params: {id}}"
                    class="button show">
-        see model data
+        see visual
       </router-link>
-      <button @click="save" class="save-button">save model</button>
-      <button @click="addField" class="add-button">add new field</button>
+      <button @click="addField" class="add-button">add field</button>
       <router-link :to="{name: 'ShapeEditor', params: {id}}"
-                   class="button shape">
+                   class="button layout">
         edit layout
       </router-link>
-      <input class="button shape" type="file" @change="handleUpload">
+      <button @click="save" class="save-button">save model</button>
+
+      <!--<input class="button shape" type="file" @change="handleUpload">-->
     </div>
     <div class="model-details">
       <label>model name</label>
@@ -133,8 +134,9 @@ export default {
 
   .model-details {
     padding: 30px;
-    border: 5px dashed #efce10;
+    border: 2px dashed #efce10;
     text-align: left;
+    margin-bottom: 30px;
   }
 
   .button-wrapper {
@@ -143,11 +145,18 @@ export default {
   }
 
   .save-button {
-    background-color: #efce10;
+    border-color: #efce10;
+    color: #efce10;
   }
 
   .add-button {
-    background-color: #ff6232;
+    border-color: #ff6232;
+    color: #ff6232;
+  }
+
+  .layout {
+    border-color: #f33c6d;
+    color: #f33c6d;
   }
 
   .title {
@@ -178,9 +187,5 @@ export default {
     width: 20px;
     height: 20px;
     border: 2px solid transparent;
-  }
-
-  .shape {
-    background-color: #f33c6d;
   }
 </style>

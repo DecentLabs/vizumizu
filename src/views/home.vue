@@ -1,24 +1,18 @@
 <template>
   <main>
     <div class="button-wrapper">
-      <button @click="createModel" class="button add">create a new model</button>
-      <router-link to="/record" class="button show">add a record</router-link>
+      <button @click="createModel" class="button add">new model</button>
+      <router-link to="/record" class="button show">new record</router-link>
     </div>
     <ul>
       <li :key="index" v-for="(model, index) in models">
-        <router-link :to="{name: 'Model', params: {id: model.id}}">
-          {{model.name}}
-        </router-link>
+        {{model.name}}
         <div>
           <router-link :to="{name: 'editModel', params: {id: model.id}}"
-            class="button edit">
-            edit model
-          </router-link>
+            class="button edit"></router-link>
           <router-link :to="{name: 'ModelData', params: {id: model.id}}"
-                       class="button show">
-            see model data
-          </router-link>
-          <button @click="deleteModel(model.id)" class="delete">delete model</button>
+                       class="button see"></router-link>
+          <button @click="deleteModel(model.id)" class="delete"></button>
         </div>
       </li>
     </ul>
@@ -76,16 +70,18 @@ export default {
     border-bottom: 1px solid #ccc;
   }
 
-  button {
-    display: inline-block;
-    padding: 10px;
-    font-size: 18px;
-    color: #fff;
-    border: none;
-    cursor: pointer;
+  .edit,
+  .see {
+    width: 40px;
+    height: 40px;
+    border: 0;
   }
 
-  .delete {
-    background-color: #194959;
+  .edit {
+    background: url('../assets/edit.png') center / 80% no-repeat transparent;
+  }
+
+  .see {
+    background: url('../assets/see.png') center / 80% no-repeat transparent;
   }
 </style>

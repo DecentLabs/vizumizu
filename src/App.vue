@@ -32,7 +32,8 @@ button, .button {
   padding: 10px;
   font-size: 18px;
   color: #fff;
-  border: none;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  border: 2px solid transparent;
   cursor: pointer;
   line-height: 24px;
   box-sizing: border-box;
@@ -40,14 +41,24 @@ button, .button {
 }
 
 .add {
-  background-color: #ff6232;
+  border-color: #ff6232;
+  color: #ff6232;
 }
 
 .edit {
-  background-color: #efce10;
+  border-color: #efce10;
+  color: #efce10;
 }
 
 .show {
-  background-color: #3fbaa9;
+  border-color: #3fbaa9;
+  color: #3fbaa9;
+}
+
+.delete {
+  width: 40px;
+  height: 40px;
+  background: url('./assets/delete.png') center / contain no-repeat transparent;
+  border: none;
 }
 </style>

@@ -24,7 +24,7 @@
     </div>
     <div class="button-row">
       <button @click="addFieldValue" class="add-button">add value</button>
-      <button @click="deleteField" class="delete-button">X</button>
+      <button @click="deleteField" class="delete"></button>
     </div>
   </div>
 </template>
@@ -126,9 +126,5 @@ export default {
   .field-values {
     width: 100%;
     padding: 20px;
-  }
-
-  .delete-button {
-    background-color: #020202;
   }
 </style>
