@@ -1,21 +1,23 @@
 <template>
-  <div class="field-row">
-    <div>
-      <label :for="id">Field name</label>
-      <input :id="id" type="text" v-model="name">
-    </div>
-    <div>
-      <label>Field visual</label>
-      <select v-model="selectedVisual">
-        <option :key="index" v-for="(visual, index) in visualTypes"
-                :value="visual">{{visual}}
-        </option>
-      </select>
-    </div>
-    <div>
-      <label>Field shape</label>
-      <shape-select defaultOption="model" :selectedItem="shape"
-                    @onSelectChange="onShapeChange"></shape-select>
+  <div class="field">
+    <div class="field-row">
+      <div>
+        <label :for="id">Field name</label>
+        <input :id="id" type="text" v-model="name">
+      </div>
+      <div>
+        <label>Field visual</label>
+        <select v-model="selectedVisual">
+          <option :key="index" v-for="(visual, index) in visualTypes"
+                  :value="visual">{{visual}}
+          </option>
+        </select>
+      </div>
+      <div>
+        <label>Field shape</label>
+        <shape-select defaultOption="model" :selectedItem="shape"
+                      @onSelectChange="onShapeChange"></shape-select>
+      </div>
     </div>
     <div class="field-values">
       <div :key="val.id" v-for="val in field.fieldValues">
@@ -23,7 +25,7 @@
       </div>
     </div>
     <div class="button-row">
-      <button @click="addFieldValue" class="add-button">add value</button>
+      <button @click="addFieldValue" class="add">add value</button>
       <button @click="deleteField" class="delete"></button>
     </div>
   </div>
@@ -98,13 +100,24 @@ export default {
 </script>
 
 <style scoped>
-  .field-row {
+  .field {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-    padding: 20px 40px;
+    padding: 30px 0;
     margin-bottom: 15px;
-    border-bottom: 1px solid #848484;
+  }
+
+  .field-row {
+    display: flex;
+    width: 100%;
+    background: #9aa0a8;
+    align-items: center;
+    padding: 10px 5px;
+  }
+
+  .field-row > div {
+    margin-right: 20px;
   }
 
   .button-row {
@@ -120,7 +133,7 @@ export default {
   input,
   select {
     border: none;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #848484;
   }
 
   .field-values {

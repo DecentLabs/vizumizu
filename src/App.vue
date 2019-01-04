@@ -38,6 +38,7 @@ button, .button {
   line-height: 24px;
   box-sizing: border-box;
   vertical-align: middle;
+  transition: background-color .3s;
 }
 
 .add {
@@ -45,14 +46,29 @@ button, .button {
   color: #ff6232;
 }
 
-.edit {
+.add:hover {
+  background-color: #ff6232;
+  color: #fff;
+}
+
+.yellow {
   border-color: #efce10;
   color: #efce10;
+}
+
+.yellow:hover {
+  background-color: #efce10;
+  color: #fff;
 }
 
 .show {
   border-color: #3fbaa9;
   color: #3fbaa9;
+}
+
+.show:hover {
+  background-color: #3fbaa9;
+  color: #fff;
 }
 
 .delete {

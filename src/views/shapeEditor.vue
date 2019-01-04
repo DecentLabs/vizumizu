@@ -1,7 +1,7 @@
 <template>
   <main>
     <div>
-      <router-link class="button edit" :to="{name: 'editModel', params: {id}}">
+      <router-link class="button yellow" :to="{name: 'editModel', params: {id}}">
         model
       </router-link>
       <router-link :to="{name: 'ModelData', params: {id}}"
@@ -10,22 +10,23 @@
       </router-link>
       <button class="button add">save</button>
     </div>
-    <div :key="i"
-         v-for="(img, i) in layout"
-         v-bind:style="{
-        top: img.top + 'px',
-        left: img.left + 'px',
-        width: img.width + 'px',
-        height: img.height + 'px'
-      }"
-         :data-field-id="img.id"
-         :data-top="img.top"
-         :data-left="img.left"
-         class="draggable-source"
-    >
-      <visual :image="img.image"></visual>
+    <div class="editor">
+      <div :key="i"
+           v-for="(img, i) in layout"
+           v-bind:style="{
+          top: img.top + 'px',
+          left: img.left + 'px',
+          width: img.width + 'px',
+          height: img.height + 'px'
+        }"
+           :data-field-id="img.id"
+           :data-top="img.top"
+           :data-left="img.left"
+           class="draggable-source"
+      >
+        <visual :image="img.image"></visual>
+      </div>
     </div>
-
     <!-- img v-for="img in imgs" :src="img.src" :width="img.width" :height="img.height" -->
   </main>
 </template>
@@ -95,7 +96,7 @@ export default {
 </script>
 
 <style>
-  main {
+  .editor {
     position: relative;
   }
 
@@ -103,5 +104,4 @@ export default {
     position: absolute;
     outline: 1px solid red;
   }
-
 </style>

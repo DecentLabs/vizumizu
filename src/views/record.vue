@@ -42,7 +42,7 @@ export default {
   methods: {
     saveRecord () {
       const values = this.fields.map(field => ({
-        fieldId: field.data.id,
+        fieldId: field.id,
         fieldValueId: field.value
       }))
 

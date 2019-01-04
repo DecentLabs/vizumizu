@@ -96,14 +96,20 @@ export default {
 <style scoped>
   .value-row {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 15px;
     text-align: left;
   }
 
   .value-row > div {
-    width: 50%;
+    flex: 1;
     margin-right: 60px;
+  }
+
+  .value-row button {
+    flex: 1;
+    max-width: 40px;
   }
 
   label, input {

@@ -2,7 +2,7 @@
   <main>
     <h1>Collected data: {{model.name}}</h1>
     <router-link :to="{name: 'editModel', params: {id: model.id}}"
-                 class="button edit">
+                 class="button yellow">
       edit model
     </router-link>
     <div class="legend">

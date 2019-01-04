@@ -1,16 +1,12 @@
 <template>
   <main>
     <div class="button-wrapper">
+      <button @click="addField" title="add field" class="add-field"></button>
       <router-link :to="{name: 'ModelData', params: {id}}"
-                   class="button show">
-        see visual
-      </router-link>
-      <button @click="addField" class="add-button">add field</button>
+                   class="button see" title="see visual"></router-link>
       <router-link :to="{name: 'ShapeEditor', params: {id}}"
-                   class="button layout">
-        edit layout
-      </router-link>
-      <button @click="save" class="save-button">save model</button>
+                   class="button edit" title="edit layout"></router-link>
+      <button @click="save" class="yellow">save</button>
 
       <!--<input class="button shape" type="file" @change="handleUpload">-->
     </div>
@@ -134,9 +130,9 @@ export default {
 
   .model-details {
     padding: 30px;
-    border: 2px dashed #efce10;
     text-align: left;
     margin-bottom: 30px;
+    background-color: #efefef;
   }
 
   .button-wrapper {
@@ -144,37 +140,30 @@ export default {
     margin-bottom: 20px;
   }
 
-  .save-button {
-    border-color: #efce10;
-    color: #efce10;
-  }
-
-  .add-button {
-    border-color: #ff6232;
-    color: #ff6232;
-  }
-
-  .layout {
-    border-color: #f33c6d;
-    color: #f33c6d;
-  }
-
   .title {
     font-size: 24px;
+  }
+
+  label {
+    font-size: 20px;
+    font-weight: 500;
+    margin-right: 10px;
+    color: #090202;
   }
 
   input,
   select,
   option {
+    max-width: 160px;
     font-size: 18px;
     border: none;
     color: #121212;
-    font-weight: 700;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #c8c8c8;
     border-radius: 0;
     -webkit-appearance: initial;
     appearance: initial;
     background: none;
+    font-family: 'Avenir', sans-serif;
   }
 
   input.error,
@@ -187,5 +176,25 @@ export default {
     width: 20px;
     height: 20px;
     border: 2px solid transparent;
+  }
+
+  .edit,
+  .see,
+  .add-field {
+    width: 40px;
+    height: 40px;
+    border: 0;
+  }
+
+  .edit {
+    background: url('../assets/edit.png') center / 80% no-repeat transparent;
+  }
+
+  .see {
+    background: url('../assets/see.png') center / 80% no-repeat transparent;
+  }
+
+  .add-field {
+    background: url('../assets/add.png') center / 80% no-repeat transparent;
   }
 </style>

@@ -9,10 +9,10 @@
         <div>
           <router-link :to="{name: 'Record', params: {id: model.id}}"
                        class="button add-record"></router-link>
-          <router-link :to="{name: 'editModel', params: {id: model.id}}"
-            class="button edit"></router-link>
           <router-link :to="{name: 'ModelData', params: {id: model.id}}"
                        class="button see"></router-link>
+          <router-link :to="{name: 'editModel', params: {id: model.id}}"
+                       class="button edit"></router-link>
           <button @click="deleteModel(model.id)" class="delete"></button>
         </div>
       </li>
