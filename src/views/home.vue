@@ -2,12 +2,13 @@
   <main>
     <div class="button-wrapper">
       <button @click="createModel" class="button add">new model</button>
-      <router-link to="/record" class="button show">new record</router-link>
     </div>
     <ul>
       <li :key="index" v-for="(model, index) in models">
         {{model.name}}
         <div>
+          <router-link :to="{name: 'Record', params: {id: model.id}}"
+                       class="button add-record"></router-link>
           <router-link :to="{name: 'editModel', params: {id: model.id}}"
             class="button edit"></router-link>
           <router-link :to="{name: 'ModelData', params: {id: model.id}}"
@@ -49,14 +50,16 @@ export default {
   }
 
   .button-wrapper {
-    margin-bottom: 60px;
-    text-align: center;
+    width: 760px;
+    margin: 0 auto 60px;
+    text-align: right;
   }
 
   ul {
     width: 760px;
     margin: 0 auto;
     list-style: none;
+    padding: 0;
   }
 
   li {
@@ -71,7 +74,8 @@ export default {
   }
 
   .edit,
-  .see {
+  .see,
+  .add-record {
     width: 40px;
     height: 40px;
     border: 0;
@@ -83,5 +87,9 @@ export default {
 
   .see {
     background: url('../assets/see.png') center / 80% no-repeat transparent;
+  }
+
+  .add-record {
+    background: url('../assets/add.png') center / 80% no-repeat transparent;
   }
 </style>

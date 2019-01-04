@@ -29,7 +29,7 @@ export default new Router({
       params: true
     },
     {
-      path: '/record',
+      path: '/record/:id',
       name: 'Record',
       component: Record,
       params: true

@@ -112,10 +112,11 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('modelStore/refreshModel', this.id)
-    this.$store.dispatch('recordStore/setRecordList')
+    this.$store.dispatch('recordStore/setRecordList', this.id)
     this.$store.dispatch('layoutStore/reset', this.id)
-    console.log(this.visualsets)
+  },
+  created () {
+    this.$store.dispatch('modelStore/refreshModel', this.id)
   },
   components: {
     visual

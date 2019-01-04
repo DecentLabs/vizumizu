@@ -6,18 +6,10 @@
         <label>Name</label>
         <input type="text" v-model="recordName">
       </div>
-      <div class="input-row">
-        <label>select model</label>
-        <select v-model="selectedModelId">
-          <option :key="index" v-for="(model, index) in models"
-                  :value="model.id">{{model.name}}</option>
-          <option selected value="null">choose one</option>
-        </select>
-      </div>
-      <div v-if="selectedModel">
-        <div :key="i" v-for="(field, i) in selectedModel.fields" class="input-row">
+      <div>
+        <div :key="i" v-for="(field, i) in fields" class="input-row">
           <label>select {{field.name}}</label>
-          <select v-model="selectedModelsFields[i].value">
+          <select v-model="fields[i].value">
             <option :key="index" v-for="(value, index) in field.fieldValues"
                     :value="value.id">{{value.value}}</option>
           </select>
@@ -30,42 +22,35 @@
 </template>
 
 <script>
-import { Model } from '../data/interfaces'
+//import { Model } from '../data/interfaces'
 
 export default {
   name: 'Record',
   data () {
     return {
-      recordName: 'untitled',
-      selectedModelId: 'select one',
-      selectedModelsFields: []
+      recordName: 'untitled'
     }
   },
   computed: {
     id () {
       return this.$route.params.id
     },
-    selectedModel () {
-      const modelStr = window.localStorage.getItem(this.selectedModelId)
-      return Model.load(JSON.parse(modelStr))
-    },
-    models () {
-      return this.$store.state.appStore.models
+    fields () {
+      return this.$store.state.modelStore.fields
     }
   },
   methods: {
     saveRecord () {
-      const values = this.selectedModelsFields.map(field => ({
+      const values = this.fields.map(field => ({
         fieldId: field.data.id,
         fieldValueId: field.value
       }))
 
-      const recordData = {
+      const record = {
         name: this.recordName,
-        model: this.selectedModel.id,
         values
       }
-      this.$store.dispatch('recordStore/addRecord', recordData)
+      this.$store.dispatch('recordStore/addRecord', {record, id: this.id})
     },
     saveRecordAndAdd (e) {
       e.preventDefault()
@@ -78,20 +63,8 @@ export default {
       this.$router.replace('/')
     }
   },
-  watch: {
-    selectedModel () {
-      console.log(this.selectedModel)
-      this.selectedModelsFields = this.selectedModel.fields.map(field => (
-        {
-          data: field,
-          value: ''
-        }
-      ))
-    }
-  },
   created () {
-    this.$store.dispatch('recordStore/setRecordList')
-    this.$store.dispatch('appStore/setModelList')
+    this.$store.dispatch('modelStore/refreshModel', this.$route.params.id)
   }
 }
 </script>

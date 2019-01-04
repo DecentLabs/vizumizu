@@ -6,7 +6,8 @@ export default {
   getters: {
     getRecordsByModel (state) {
       return (id) => {
-        return state.records.filter(item => item.model === id).map(record => record.values)
+        const records = JSON.parse(localStorage.getItem(`records-${id}`))
+        return records.map(record => record.values)
       }
     }
   },
@@ -19,13 +20,13 @@ export default {
     }
   },
   actions: {
-    addRecord ({state, commit}, record) {
+    addRecord ({state, commit}, {record, id}) {
       commit('addRecord', record)
-      localStorage.setItem('records', JSON.stringify(state.records))
+      localStorage.setItem(`records-${id}`, JSON.stringify(state.records))
     },
-    setRecordList ({commit}) {
-      if (localStorage.getItem('records')) {
-        commit('setRecords', JSON.parse(localStorage.getItem('records')))
+    setRecordList ({commit}, id) {
+      if (localStorage.getItem(`records-${id}`)) {
+        commit('setRecords', JSON.parse(localStorage.getItem(`records-${id}`)))
       }
     }
   }
