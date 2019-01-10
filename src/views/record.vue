@@ -22,8 +22,6 @@
 </template>
 
 <script>
-//import { Model } from '../data/interfaces'
-
 export default {
   name: 'Record',
   data () {

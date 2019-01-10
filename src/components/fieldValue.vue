@@ -1,11 +1,11 @@
 <template>
   <div class="value-row">
     <div>
-      <label :for="id">Value name</label>
+      <label :for="id">Value</label>
       <input :id="id" type="text" v-model="value" :class="{error: isError(value)}">
     </div>
     <div v-if="isMultipleValue">
-      <label>visual value</label>
+      <label>visual</label>
       <select v-model="visualValue" :class="{error: isError(visualValue)}">
         <option :key="index" v-for="(visual, index) in selectedVisualValue"
                 :value="visual">{{visual}}
@@ -13,7 +13,7 @@
       </select>
     </div>
     <div v-else>
-      <label>visual value</label>
+      <label>Visual</label>
       <input type="text" v-model="visualValue" :class="{error: isError(visualValue)}">
       <div v-if="isColor" class="colormarker" :style="{backgroundColor: visualValue}"></div>
     </div>
@@ -98,7 +98,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     text-align: left;
   }
 
@@ -113,7 +113,7 @@ export default {
   }
 
   label, input {
-    font-size: 18px;
+    font-size: 17px;
     padding: 5px 10px;
   }
 </style>

@@ -18,15 +18,13 @@
         <shape-select defaultOption="model" :selectedItem="shape"
                       @onSelectChange="onShapeChange"></shape-select>
       </div>
+      <button @click="deleteField" class="delete"></button>
     </div>
     <div class="field-values">
-      <div :key="val.id" v-for="val in field.fieldValues">
-        <field-value :fieldValue="val" :field="field"/>
-      </div>
+      <field-value :key="val.id" v-for="val in field.fieldValues" :fieldValue="val" :field="field"/>
     </div>
     <div class="button-row">
       <button @click="addFieldValue" class="add">add value</button>
-      <button @click="deleteField" class="delete"></button>
     </div>
   </div>
 </template>
@@ -104,25 +102,38 @@ export default {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-    padding: 30px 0;
-    margin-bottom: 15px;
+    padding: 30px 10px 30px;
+    box-sizing: border-box;
+    border: 1px solid #eaeaea;
+    border-top: 0;
+    background-color: #fefefe;
   }
 
   .field-row {
     display: flex;
     width: 100%;
-    background: #9aa0a8;
     align-items: center;
-    padding: 10px 5px;
+    margin-bottom: 10px;
   }
 
   .field-row > div {
     margin-right: 20px;
   }
 
+  .field-row label {
+    color: #ff6125;
+  }
+
+  /*.field-row input,*/
+  /*.field-row select {*/
+    /*border-color: #ff6125;*/
+  /*}*/
+
   .button-row {
     width: 100%;
     text-align: right;
+    padding-right: 30px;
+    box-sizing: border-box;
   }
 
   label, input {
@@ -132,12 +143,13 @@ export default {
 
   input,
   select {
+    font-size: 17px;
     border: none;
     border-bottom: 1px solid #848484;
   }
 
   .field-values {
     width: 100%;
-    padding: 20px;
+    padding: 10px 20px;
   }
 </style>

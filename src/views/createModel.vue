@@ -11,28 +11,26 @@
       <!--<input class="button shape" type="file" @change="handleUpload">-->
     </div>
     <div class="model-details">
-      <label>model name</label>
+      <label>Model name</label>
       <input type="text" placeholder="add model name" v-model="name" class="title" :class="{error: isError(name)}">
       <div class="basic-visuals">
         <div>
-          <label>basic shape</label>
+          <label>Basic shape</label>
           <shape-select defaultOption="select a shape" @onSelectChange="onShapeChange" :selectedItem="shape" ></shape-select>
         </div>
         <div>
-          <label>basic fill</label>
+          <label>Basic fill</label>
           <input type="text" placeholder="add fill color" v-model="fill" :class="{error: isError(fill)}">
           <div class="colormarker" :style="{backgroundColor: fill}"></div>
         </div>
         <div>
-          <label>basic stroke</label>
+          <label>Basic stroke</label>
           <input type="text" placeholder="add stroke color" v-model="stroke" :class="{error: isError(stroke)}">
           <div class="colormarker" :style="{borderColor: stroke}"></div>
         </div>
       </div>
     </div>
-    <div :key="field.id" v-for="field in fields">
-      <field-input :id="field.id" :field="field"/>
-    </div>
+    <field-input :key="field.id" v-for="field in fields" :id="field.id" :field="field"/>
   </main>
 </template>
 
@@ -131,8 +129,12 @@ export default {
   .model-details {
     padding: 30px;
     text-align: left;
-    margin-bottom: 30px;
     background-color: #efefef;
+  }
+
+  .model-details input,
+  .model-details select {
+    margin-bottom: 5px;
   }
 
   .button-wrapper {
@@ -140,12 +142,8 @@ export default {
     margin-bottom: 20px;
   }
 
-  .title {
-    font-size: 24px;
-  }
-
   label {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     margin-right: 10px;
     color: #090202;
@@ -155,7 +153,7 @@ export default {
   select,
   option {
     max-width: 160px;
-    font-size: 18px;
+    font-size: 17px;
     border: none;
     color: #121212;
     border-bottom: 1px solid #c8c8c8;
@@ -173,8 +171,8 @@ export default {
 
   .colormarker {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
     border: 2px solid transparent;
   }
 
