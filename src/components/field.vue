@@ -122,6 +122,7 @@ export default {
 
   .field-row label {
     color: #ff6125;
+    font-weight: 700;
   }
 
   /*.field-row input,*/

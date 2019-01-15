@@ -1,14 +1,45 @@
 <template>
   <div id="app">
     <h1><router-link to="/">vizumizu</router-link></h1>
+    <button @click="logIn" class="yellow" v-if="!user">log in</button>
+    <button @click="logOut" class="yellow" v-if="user">log out</button>
     <router-view/>
   </div>
 </template>
 
 <script>
+import firebase from 'firebase'
+
+const provider = new firebase.auth.GoogleAuthProvider()
+
 export default {
-  name: 'App'
+  name: 'App',
+  computed: {
+    user () {
+      return this.$store.state.appStore.user
+    }
+  },
+  methods: {
+    logIn () {
+      firebase.auth().signInWithPopup(provider).then((result) => {
+        const token = result.credential.accessToken
+        console.log(token)
+        this.$store.commit('appStore/setUser', token)
+      }).catch((error) => {
+        const errorMessage = error.message
+        console.log(errorMessage)
+      })
+    },
+    logOut () {
+      firebase.auth().signOut().then(() => {
+        this.$store.commit('appStore/setUser', null)
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+  }
 }
+
 </script>
 
 <style>

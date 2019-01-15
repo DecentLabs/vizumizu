@@ -111,12 +111,10 @@ export default {
       return shapes
     }
   },
-  mounted () {
-    this.$store.dispatch('recordStore/setRecordList', this.id)
-    this.$store.dispatch('layoutStore/reset', this.id)
-  },
   created () {
     this.$store.dispatch('modelStore/refreshModel', this.id)
+    this.$store.dispatch('recordStore/setRecordList', this.id)
+    this.$store.dispatch('layoutStore/reset', this.id)
   },
   components: {
     visual
@@ -136,15 +134,15 @@ export default {
 
   .legend {
     display: flex;
-    width: 70%;
+    width: 90%;
     flex-flow: row wrap;
     margin: 0 auto 30px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #666;
   }
 
   .legend .field {
-    width: 50%;
+    min-width: 25%;
     padding: 20px;
     box-sizing: border-box;
   }
@@ -157,6 +155,10 @@ export default {
   .legend-visuals {
     width: 100%;
     display: flex;
+  }
+
+  .legend-visuals p {
+    margin: 0 0 5px;
   }
 
   .legend .visual-wrapper {

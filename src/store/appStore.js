@@ -3,6 +3,7 @@ import { ModelHead } from '../data/interfaces'
 export default {
   namespaced: true,
   state: {
+    user: null,
     models: [],
     visuals: []
   },
@@ -14,6 +15,9 @@ export default {
     }
   },
   mutations: {
+    setUser (state, token) {
+      state.user = token
+    },
     addModelToList (state, model) {
       state.models.push(model)
     },

@@ -154,12 +154,11 @@ export default {
   option {
     max-width: 160px;
     font-size: 17px;
-    border: none;
     color: #121212;
+    appearance: initial;
+    border: none;
     border-bottom: 1px solid #c8c8c8;
     border-radius: 0;
-    -webkit-appearance: initial;
-    appearance: initial;
     background: none;
     font-family: 'Avenir', sans-serif;
   }
