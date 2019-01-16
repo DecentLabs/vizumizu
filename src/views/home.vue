@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="button-wrapper">
+    <div class="button-wrapper" v-if="user">
       <button @click="createModel" class="button add">new model</button>
     </div>
     <ul>
@@ -21,17 +21,19 @@
 </template>
 
 <script>
-
 export default {
   name: 'home',
   computed: {
+    user () {
+      return this.$store.state.appStore.user
+    },
     models () {
       return this.$store.state.appStore.models
     }
   },
   methods: {
     createModel () {
-      this.$store.dispatch('appStore/createModel').then(resp => {
+      this.$store.dispatch('appStore/createModel', {user: this.user}).then(resp => {
         this.$router.replace(`/editModel/${resp.id}`)
       })
     },
@@ -39,8 +41,10 @@ export default {
       this.$store.dispatch('appStore/deleteModel', id)
     }
   },
-  mounted () {
-    this.$store.dispatch('appStore/setModelList')
+  watch: {
+    user () {
+      this.$store.dispatch('appStore/load')
+    }
   }
 }
 </script>

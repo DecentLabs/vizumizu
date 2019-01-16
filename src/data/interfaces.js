@@ -79,7 +79,7 @@ class Transform {
 
   static load (o) {
     const newTransform = new Transform()
-    if (o) {
+    if (o && o.values) {
       newTransform.type = o.type
       Object.keys(o.values).forEach(key => {
         newTransform.addVisual(key, Visual.load(o.values[key]))

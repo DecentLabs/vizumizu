@@ -9,6 +9,7 @@
 
 <script>
 import firebase from 'firebase'
+import { setUserData } from './data/db'
 
 const provider = new firebase.auth.GoogleAuthProvider()
 
@@ -22,9 +23,9 @@ export default {
   methods: {
     logIn () {
       firebase.auth().signInWithPopup(provider).then((result) => {
-        const token = result.credential.accessToken
-        console.log(token)
-        this.$store.commit('appStore/setUser', token)
+        const userId = result.user.uid
+        this.$store.commit('appStore/setUser', userId)
+        setUserData(userId)
       }).catch((error) => {
         const errorMessage = error.message
         console.log(errorMessage)

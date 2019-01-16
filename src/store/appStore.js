@@ -1,4 +1,5 @@
-import { ModelHead } from '../data/interfaces'
+import { ModelHead, Model } from '../data/interfaces'
+import {getUserData, setModelData, updateModelData, removeModelData} from '../data/db.js'
 
 export default {
   namespaced: true,
@@ -22,7 +23,7 @@ export default {
       state.models.push(model)
     },
     setModels (state, models) {
-      state.models = models.map(jsonModel => ModelHead.load(jsonModel))
+      state.models = models && models.map(model => Model.load(model))
     },
     removeModel (state, id) {
       state.models = state.models.filter(stateModel => stateModel.id !== id)
@@ -38,34 +39,31 @@ export default {
     }
   },
   actions: {
-    save ({ state }) {
-      window.localStorage.setItem('models', JSON.stringify(state.models))
+    load ({ state, commit }) {
+      if (state.user) {
+        getUserData(state.user).then(resp => {
+          const data = resp.val().models || {}
+          const models = Object.values(data)
+          commit('setModels', models)
+        })
+      } else {
+        commit('setModels', [])
+      }
     },
-    initModel (context, model) {
-      window.localStorage.setItem(model.id, JSON.stringify(model))
-    },
-    load ({ commit }) {
-      const models = JSON.parse(window.localStorage.getItem('models'))
-      commit('setModels', models)
-    },
-    setModelList ({ dispatch }) {
-      dispatch('load')
-    },
-    createModel ({ state, commit, dispatch }) {
+    createModel ({ commit }, {user}) {
       const model = new ModelHead()
       commit('addModelToList', model)
-      dispatch('save')
-      dispatch('initModel', model)
+      setModelData(user, model)
       return new Promise(resolve => resolve(model), err => console.log(err))
     },
-    updateModel ({ commit, dispatch }, model) {
+    updateModel ({ state, commit, dispatch }, model) {
       dispatch('load')
       commit('updateModel', model)
-      dispatch('save')
+      updateModelData(state.user, model)
     },
-    deleteModel ({ commit, dispatch }, id) {
+    deleteModel ({ commit, state }, id) {
       commit('removeModel', id)
-      dispatch('save')
+      removeModelData(state.user, id)
     }
   }
 }

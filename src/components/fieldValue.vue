@@ -78,7 +78,6 @@ export default {
         fieldId: this.field.id
       }
 
-      console.log(options, 'fv')
       this.$store.dispatch('modelStore/deleteValueOfField', options)
     },
     saveVisualValue (value) {

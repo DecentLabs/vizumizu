@@ -1,4 +1,5 @@
 import { Model, Field, FieldValue, Visual, Transform } from '../data/interfaces'
+import { getModelData } from '../data/db.js'
 
 export default {
   namespaced: true,
@@ -9,12 +10,12 @@ export default {
     shape: 'rect',
     fill: '',
     stroke: '',
-    error: false
+    error: false,
+    fieldErrors: []
   },
   getters: {
     getFieldById (state) {
       return (id) => {
-        console.log('getfieldId', id)
         return state.fields.find(field => field.id === id)
       }
     },
@@ -129,23 +130,25 @@ export default {
       const oldField = getters.getFieldById(newField.id)
       commit('updateField', { oldField, newField })
     },
-    refreshModel ({ state, commit }, id) {
-      const modelStr = window.localStorage.getItem(id)
-      if (modelStr) {
-        const model = Model.load(JSON.parse(modelStr))
+    refreshModel ({ rootState, commit }, id) {
+      getModelData(rootState.appStore.user, id).then(resp => {
+        const modelData = resp.val()
+        const model = Model.load(modelData)
         commit('setModel', model)
-      }
+      })
     },
     updateModelData ({ state }, payload) {
       Object.assign(state, payload)
     },
     save ({ state, dispatch }) {
-      if (state.name === '' || state.fill === '' || state.stroke === '' || state.shape === '') {
+      const fieldErrors = state.fields.filter(item => item.name === 'untitled' || !item.transform.type)
+      if (state.name === '' || state.fill === '' || state.stroke === '' || state.shape === '' || fieldErrors.length) {
         state.error = true
+        state.fieldErrors = fieldErrors
         return
       }
+
       dispatch('appStore/updateModel', state, { root: true })
-      window.localStorage.setItem(state.id, JSON.stringify(state))
     }
   }
 }

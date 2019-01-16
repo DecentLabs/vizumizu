@@ -13,7 +13,14 @@ const config = {
   projectId: 'vizumizu-70fc9'
 }
 
-firebase.initializeApp(config)
+const fireApp = firebase.initializeApp(config)
+const database = fireApp.database()
+// const userListRef = database.ref('users')
+// const modelListRef = database.ref('models')
+// const visualListRef = database.ref('visuals')
+// userListRef.push()
+// modelListRef.push()
+// visualListRef.push()
 
 Vue.config.productionTip = false
 
@@ -25,3 +32,7 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+export {
+  database
+}

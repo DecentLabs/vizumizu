@@ -3,11 +3,11 @@
     <div class="field-row">
       <div>
         <label :for="id">Field name</label>
-        <input :id="id" type="text" v-model="name">
+        <input :id="id" type="text" v-model="name" :class="hasFieldError && name === 'untitled' && 'error'">
       </div>
       <div>
         <label>Field visual</label>
-        <select v-model="selectedVisual">
+        <select v-model="selectedVisual" :class="hasFieldError && !selectedVisual && 'error'">
           <option :key="index" v-for="(visual, index) in visualTypes"
                   :value="visual">{{visual}}
           </option>
@@ -67,6 +67,10 @@ export default {
       set (value) {
         this.$store.dispatch('modelStore/updateField', { id: this.field.id, transform: new Transform(value) })
       }
+    },
+    hasFieldError () {
+      const fields = this.$store.state.modelStore.fieldErrors
+      return fields.some(field => field.id === this.id)
     }
   },
   methods: {
@@ -147,6 +151,11 @@ export default {
     font-size: 17px;
     border: none;
     border-bottom: 1px solid #848484;
+  }
+
+  input.error,
+  select.error {
+    border-bottom: 2px solid #ff6232;
   }
 
   .field-values {

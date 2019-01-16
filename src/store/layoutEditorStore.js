@@ -159,7 +159,6 @@ export default {
           0,
           Strength.strong
         )
-        console.log(constrain, constrainTuple)
         solver.addConstraint(constrain)
         constrains.set(constrainTuple, constrain)
       })
