@@ -4,7 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/index.js'
-import firebase from 'firebase'
+import * as firebase from 'firebase/app'
+// import * as firebaseDB from 'firebase/database'
 
 const config = {
   apiKey: 'AIzaSyC9XtXetS1HFPSrHJVupje_rFlf7TGut4M',
@@ -15,12 +16,6 @@ const config = {
 
 const fireApp = firebase.initializeApp(config)
 const database = fireApp.database()
-// const userListRef = database.ref('users')
-// const modelListRef = database.ref('models')
-// const visualListRef = database.ref('visuals')
-// userListRef.push()
-// modelListRef.push()
-// visualListRef.push()
 
 Vue.config.productionTip = false
 
