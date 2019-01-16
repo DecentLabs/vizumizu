@@ -5,7 +5,8 @@ import App from './App'
 import router from './router'
 import store from './store/index.js'
 import * as firebase from 'firebase/app'
-// import * as firebaseDB from 'firebase/database'
+import 'firebase/auth'
+import 'firebase/database'
 
 const config = {
   apiKey: 'AIzaSyC9XtXetS1HFPSrHJVupje_rFlf7TGut4M',
@@ -14,8 +15,10 @@ const config = {
   projectId: 'vizumizu-70fc9'
 }
 
-const fireApp = firebase.initializeApp(config)
-const database = fireApp.database()
+firebase.initializeApp(config)
+const database = firebase.database()
+const provider = new firebase.auth.GoogleAuthProvider()
+const auth = firebase.auth()
 
 Vue.config.productionTip = false
 
@@ -29,5 +32,7 @@ new Vue({
 })
 
 export {
-  database
+  database,
+  auth,
+  provider
 }

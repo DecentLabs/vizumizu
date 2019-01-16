@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import * as firebaseAuth from 'firebase/auth'
+import {auth, provider} from './main'
 import { setUserData } from './data/db'
 
 export default {
@@ -20,9 +20,7 @@ export default {
   },
   methods: {
     logIn () {
-      const provider = new firebaseAuth.auth.GoogleAuthProvider()
-
-      firebaseAuth.auth().signInWithPopup(provider).then((result) => {
+      auth.signInWithPopup(provider).then((result) => {
         const userId = result.user.uid
         this.$store.commit('appStore/setUser', userId)
         setUserData(userId)
@@ -32,7 +30,7 @@ export default {
       })
     },
     logOut () {
-      firebaseAuth.auth().signOut().then(() => {
+      auth.signOut().then(() => {
         this.$store.commit('appStore/setUser', null)
       }).catch((error) => {
         console.log(error)
