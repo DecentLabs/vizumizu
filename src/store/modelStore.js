@@ -93,7 +93,7 @@ export default {
     }
   },
   actions: {
-    addValueToField ({ getters, dispatch, commit }, fieldId) {
+    addValueToField ({ getters, commit }, fieldId) {
       const field = getters.getFieldById(fieldId)
       commit('addFieldValue', { field, value: new FieldValue() })
     },
@@ -110,7 +110,7 @@ export default {
       const field = getters.getFieldById(fieldId)
       field.transform = new Transform()
     },
-    saveVisualToField ({ getters, commit }, { field, value, visual }) {
+    saveVisualToField ({ commit }, { field, value, visual }) {
       commit('setVisualToValue', {field, value, visual})
     },
     addFieldToModel ({ commit }) {
@@ -136,9 +136,6 @@ export default {
         const model = Model.load(modelData)
         commit('setModel', model)
       })
-    },
-    updateModelData ({ state }, payload) {
-      Object.assign(state, payload)
     },
     save ({ state, dispatch }) {
       const fieldErrors = state.fields.filter(item => item.name === 'untitled' || !item.transform.type)

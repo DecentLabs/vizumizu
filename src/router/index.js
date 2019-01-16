@@ -6,15 +6,19 @@ import Model from '../views/model.vue'
 import ModelData from '../views/modelData.vue'
 import Record from '../views/record.vue'
 import ShapeEditor from '../views/shapeEditor.vue'
+import { auth } from '../main'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: {
+        auth: true
+      }
     },
     {
       path: '/editModel/:id',
@@ -48,3 +52,16 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const currentUser = auth.currentUser
+  console.log(currentUser)
+  const requiresAuth = to.matched.some(record => record.meta.auth)
+  if (!requiresAuth && !currentUser) {
+    router.go('Home')
+  } else {
+    next()
+  }
+})
+
+export default router

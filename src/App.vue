@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {auth, provider} from './main'
+import { auth, provider } from './main'
 import { setUserData } from './data/db'
 
 export default {
