@@ -2,6 +2,7 @@ import { findByName } from '../data/images.js'
 import { Solver, Strength, Operator, Constraint, Expression } from 'kiwi.js'
 import LayoutItem from '../data/LayoutItem.js'
 import getters from './layoutGetters/getters.js'
+import { setLayoutData, getLayoutData } from '../data/db'
 
 const LAYOUT_ACTIONS = {
   setImageByName: 'setImageByName',
@@ -21,7 +22,7 @@ const LAYOUT_MUTATIONS = {
   selectField: 'selectField',
   updateImage: 'updateImage',
   updatePosition: 'updatePosition',
-  resetLayoutStore: 'resetLayoutStore',
+  resetLayoutDataStore: 'resetLayoutDataStore',
   updateSolver: 'updateSolver',
   updateLayout: 'updateLayout'
 }
@@ -50,7 +51,7 @@ export default {
     [LAYOUT_MUTATIONS.updateSolver] (state) {
       state.solver.updateVariables()
     },
-    [LAYOUT_MUTATIONS.resetLayoutStore] (state) {
+    [LAYOUT_MUTATIONS.resetLayoutDataStore] (state) {
       state.solver = new Solver()
       state.fields = []
       state.constrains = new Map()
@@ -77,15 +78,17 @@ export default {
     }
   },
   actions: {
-    [LAYOUT_ACTIONS.reset] ({commit, dispatch, rootGetters}, modelId) {
+    [LAYOUT_ACTIONS.reset] ({commit, dispatch, rootState, rootGetters}, modelId) {
       commit(LAYOUT_MUTATIONS.setModelId, modelId)
-      commit(LAYOUT_MUTATIONS.resetLayoutStore)
+      commit(LAYOUT_MUTATIONS.resetLayoutDataStore)
       dispatch(LAYOUT_ACTIONS.loadFields, rootGetters['modelStore/getFieldsToDraw'])
 
-      const tuples = JSON.parse(localStorage.getItem(`layout-${modelId}`))
-      if (tuples && tuples.length) {
-        dispatch(LAYOUT_ACTIONS.setFieldConstrain, tuples)
-      }
+      getLayoutData(rootState.appStore.user, modelId).then((resp) => {
+        const tuples = resp.val()
+        if (tuples && tuples.length) {
+          dispatch(LAYOUT_ACTIONS.setFieldConstrain, tuples)
+        }
+      })
     },
     [LAYOUT_ACTIONS.loadFields] ({commit, rootGetters}, fieldList) {
       fieldList.forEach(field => {
@@ -93,7 +96,7 @@ export default {
         commit(LAYOUT_MUTATIONS.addField, field)
       })
     },
-    [LAYOUT_ACTIONS.setFieldPosition] ({state, commit, getters}, {id, position}) {
+    [LAYOUT_ACTIONS.setFieldPosition] ({commit, getters}, {id, position}) {
       const field = getters.getFieldById(id)
       commit(LAYOUT_MUTATIONS.updatePosition, {field, position})
       commit(LAYOUT_MUTATIONS.updateSolver)
@@ -113,7 +116,7 @@ export default {
 
       state.constrains = newConstrains
     },
-    [LAYOUT_ACTIONS.setFieldConstrain] ({state, getters, commit}, nearby) {
+    [LAYOUT_ACTIONS.setFieldConstrain] ({rootState, state, getters, commit}, nearby) {
       const solver = state.solver
       const constrains = state.constrains
       console.log('nearby', nearby)
@@ -137,12 +140,12 @@ export default {
       })
 
       commit(LAYOUT_MUTATIONS.updateSolver)
-      localStorage.setItem(`layout-${state.modelId}`, JSON.stringify(Array.from(constrains.keys())))
+      setLayoutData(rootState.appStore.user, state.modelId, Array.from(constrains.keys()))
     },
-    [LAYOUT_ACTIONS.loadFieldConstrains] ({state, getters, commit}, modelId) {
+    [LAYOUT_ACTIONS.loadFieldConstrains] ({state, getters, commit, rootState}, modelId) {
       const solver = state.solver
       const constrains = state.constrains
-      const layouts = getters.getLayout(modelId)
+      const layouts = getters.getLayout(rootState.appStore.user, modelId)
 
       layouts.forEach(constrainTuple => {
         const [p1, p2] = constrainTuple

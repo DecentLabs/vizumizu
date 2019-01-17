@@ -8,7 +8,7 @@ const imageByName = state => name =>
   state.images.find(image => image.name === name)
 const getFieldById = state => id => state.fields.find(field => field.id === id)
 
-const getLayout = state => id => state.layout.length > 0 ? state.layout : JSON.parse(localStorage.getItem(`layout-${id}`))
+const getLayout = state => (user, id) => state.layout.length > 0 ? state.layout : getLayout(user, id)
 
 const getNearbyPoints = state => field => {
   const threshold = 10

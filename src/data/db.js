@@ -40,6 +40,15 @@ function getRecord (userId, modelId) {
   return database.ref(`users/${userId}/records/${modelId}`).once('value')
 }
 
+function setLayoutData (userId, modelId, layout) {
+  const newRecord = database.ref(`users/${userId}/layout/${modelId}`).push()
+  newRecord.set(layout)
+}
+
+function getLayoutData (userId, modelId) {
+  return database.ref(`users/${userId}/layout/${modelId}`).once('value')
+}
+
 export {
   setUserData,
   getUserData,
@@ -48,5 +57,7 @@ export {
   getModelData,
   removeModelData,
   setRecord,
-  getRecord
+  getRecord,
+  setLayoutData,
+  getLayoutData
 }
