@@ -1,42 +1,14 @@
 <template>
   <div id="app">
     <h1><router-link to="/">vizumizu</router-link></h1>
-    <button @click="logIn" class="yellow" v-if="!user">log in</button>
-    <button @click="logOut" class="yellow" v-if="user">log out</button>
     <router-view/>
   </div>
 </template>
 
 <script>
-import { auth, provider } from './main'
-import { setUserData } from './data/db'
 
 export default {
-  name: 'App',
-  computed: {
-    user () {
-      return this.$store.state.appStore.user
-    }
-  },
-  methods: {
-    logIn () {
-      auth.signInWithPopup(provider).then((result) => {
-        const userId = result.user.uid
-        this.$store.commit('appStore/setUser', userId)
-        setUserData(userId)
-      }).catch((error) => {
-        const errorMessage = error.message
-        console.log(errorMessage)
-      })
-    },
-    logOut () {
-      auth.signOut().then(() => {
-        this.$store.commit('appStore/setUser', null)
-      }).catch((error) => {
-        console.log(error)
-      })
-    }
-  }
+  name: 'App'
 }
 
 </script>

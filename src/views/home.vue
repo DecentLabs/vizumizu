@@ -1,5 +1,7 @@
 <template>
   <main>
+    <button @click="logIn" class="yellow" v-if="!user">log in</button>
+    <button @click="logOut" class="yellow" v-if="user">log out</button>
     <div class="button-wrapper" v-if="user">
       <button @click="createModel" class="button add">new model</button>
     </div>
@@ -21,6 +23,9 @@
 </template>
 
 <script>
+import { auth, provider } from '../main'
+import { setUserData } from '../data/db'
+
 export default {
   name: 'home',
   computed: {
@@ -39,6 +44,23 @@ export default {
     },
     deleteModel (id) {
       this.$store.dispatch('appStore/deleteModel', id)
+    },
+    logIn () {
+      auth.signInWithPopup(provider).then((result) => {
+        const userId = result.user.uid
+        this.$store.commit('appStore/setUser', userId)
+        setUserData(userId)
+      }).catch((error) => {
+        const errorMessage = error.message
+        console.log(errorMessage)
+      })
+    },
+    logOut () {
+      auth.signOut().then(() => {
+        this.$store.commit('appStore/setUser', null)
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   },
   watch: {
