@@ -36,7 +36,7 @@ export default {
       return this.$route.params.id
     },
     records () {
-      return this.$store.getters['recordStore/getRecordsByModel'](this.id)
+      return this.$store.state.recordStore.records
     },
     model () {
       return this.$store.state.modelStore
@@ -111,7 +111,7 @@ export default {
       return shapes
     }
   },
-  created () {
+  mounted () {
     this.$store.dispatch('modelStore/refreshModel', this.id)
     this.$store.dispatch('recordStore/setRecordList', this.id)
     this.$store.dispatch('layoutStore/reset', this.id)

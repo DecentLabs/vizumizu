@@ -31,11 +31,22 @@ function removeModelData (userId, modelId) {
   database.ref(`users/${userId}/models/${modelId}`).remove()
 }
 
+function setRecord (userId, modelId, record) {
+  const newRecord = database.ref(`users/${userId}/records/${modelId}`).push()
+  newRecord.set(record)
+}
+
+function getRecord (userId, modelId) {
+  return database.ref(`users/${userId}/records/${modelId}`).once('value')
+}
+
 export {
   setUserData,
   getUserData,
   setModelData,
   updateModelData,
   getModelData,
-  removeModelData
+  removeModelData,
+  setRecord,
+  getRecord
 }

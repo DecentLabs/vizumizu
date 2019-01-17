@@ -1,15 +1,9 @@
+import { setRecord, getRecord } from '../data/db'
+
 export default {
   namespaced: true,
   state: {
     records: []
-  },
-  getters: {
-    getRecordsByModel (state) {
-      return (id) => {
-        const records = JSON.parse(localStorage.getItem(`records-${id}`))
-        return records.map(record => record.values)
-      }
-    }
   },
   mutations: {
     addRecord (state, record) {
@@ -20,14 +14,18 @@ export default {
     }
   },
   actions: {
-    addRecord ({state, commit}, {record, id}) {
+    addRecord ({rootState, commit}, {record, id}) {
       commit('addRecord', record)
-      localStorage.setItem(`records-${id}`, JSON.stringify(state.records))
+      setRecord(rootState.appStore.user, id, record)
     },
-    setRecordList ({commit}, id) {
-      if (localStorage.getItem(`records-${id}`)) {
-        commit('setRecords', JSON.parse(localStorage.getItem(`records-${id}`)))
-      }
+    setRecordList ({commit, rootState}, id) {
+      return getRecord(rootState.appStore.user, id).then(resp => {
+        if (resp.val()) {
+          let records = Object.values(resp.val())
+          records = records.map(rec => rec.values)
+          commit('setRecords', records)
+        }
+      })
     }
   }
 }
