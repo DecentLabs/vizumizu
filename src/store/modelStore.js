@@ -90,6 +90,12 @@ export default {
     },
     setStroke (state, stroke) {
       state.stroke = stroke
+    },
+    resetFieldValues (state) {
+      state.fields = state.fields.map(field => {
+        field.value = undefined
+        return field
+      })
     }
   },
   actions: {
